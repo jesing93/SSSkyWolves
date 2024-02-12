@@ -65,6 +65,17 @@ public class PlayerController : MonoBehaviour
             xInput = Mathf.MoveTowards(xInput, 0, Time.deltaTime * movementDeath);
         }
     }
+
+    public void OnMove(Vector2 direction)
+    {
+
+    }
+
+    public void OnInteract(Vector2 direction)
+    {
+
+    }
+
     private void Move()
     {
         Vector3 direction;
