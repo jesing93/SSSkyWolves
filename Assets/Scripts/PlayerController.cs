@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -12,6 +13,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool calculateWithSine;
     private float xInput;
     private float zInput;
+
+    [Header("Adaptation")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float step;
+    [SerializeField] private float adaptationSpeed;
 
     [Header("Data")]
     [SerializeField] private PlayerCameraData cameraData;
@@ -29,6 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         GetInputs();
         Move();
+        AdaptToTheTerrain();
     }
 
     private void GetReferences()
@@ -81,6 +88,33 @@ public class PlayerController : MonoBehaviour
 
         direction.y = rb.velocity.y;
         rb.velocity = direction;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, rel.transform.rotation, rotationSpeed * Time.deltaTime);
+        //transform.rotation = Quaternion.RotateTowards(transform.rotation, rel.transform.rotation, rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+    }
+
+    private void AdaptToTheTerrain()
+    {
+        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,0.5f)), Vector3.down);
+        RaycastHit forwardHit;
+        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,-0.5f)), Vector3.down);
+        RaycastHit backwardHit;
+
+        Vector3 fPoint = forwardSensor.GetPoint(step);
+        Vector3 bPoint = forwardSensor.GetPoint(step);
+
+        if(Physics.Raycast(forwardSensor, out forwardHit, step * 2,  groundLayer) && forwardHit.distance > 0.01f)
+        {
+            fPoint = forwardHit.point;
+        }
+        if(Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.01f)
+        {
+            bPoint = backwardHit.point;
+        }
+
+        rel.transform.position = bPoint;
+        rel.transform.LookAt(fPoint);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(rel.transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)), adaptationSpeed * Time.deltaTime);
+
     }
 }
