@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,11 +14,18 @@ public class PlayerController : MonoBehaviour
     private float xInput;
     private float zInput;
 
+    [Header("Adaptation")]
+    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float step;
+    [SerializeField] private float adaptationSpeed;
+
     [Header("Data")]
     [SerializeField] private PlayerCameraData cameraData;
 
     // References
     private Rigidbody rb;
+    private PlayerAnimator panim;
+    private Animator anim;
     private GameObject rel;
     private PlayerCamera cam;
 
@@ -25,15 +33,25 @@ public class PlayerController : MonoBehaviour
     {
         GetReferences();
     }
-    void Update()
+    private void Update()
     {
         GetInputs();
+        AdaptToTheTerrain();
+    }
+    void FixedUpdate()
+    {
         Move();
+    }
+    void LateUpdate()
+    {
+        panim.speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
     }
 
     private void GetReferences()
     {
         rb = GetComponent<Rigidbody>();
+        panim = GetComponent<PlayerAnimator>();
+        anim = transform.GetChild(0).GetComponent<Animator>();
         rel = new GameObject();
         cam = new GameObject().AddComponent<PlayerCamera>();
         cam.SetUp(this.transform, cameraData);
@@ -92,6 +110,35 @@ public class PlayerController : MonoBehaviour
 
         direction.y = rb.velocity.y;
         rb.velocity = direction;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, rel.transform.rotation, rotationSpeed * Time.deltaTime);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+    }
+
+    private void AdaptToTheTerrain()
+    {
+        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,0.65f)), Vector3.down);
+        RaycastHit forwardHit;
+        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,-0.65f)), Vector3.down);
+        RaycastHit backwardHit;
+
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, step, 0.65f)), Vector3.down, Color.red);
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, step, -0.65f)), Vector3.down, Color.red);
+
+        Vector3 fPoint = forwardSensor.GetPoint(step);
+        Vector3 bPoint = forwardSensor.GetPoint(step);
+
+        if(Physics.Raycast(forwardSensor, out forwardHit, step * 2,  groundLayer) && forwardHit.distance > 0.01f)
+        {
+            fPoint = forwardHit.point;
+        }
+        if(Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.01f)
+        {
+            bPoint = backwardHit.point;
+        }
+
+        rel.transform.position = bPoint;
+        rel.transform.LookAt(fPoint);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(rel.transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)), adaptationSpeed * Time.deltaTime);
     }
 }
