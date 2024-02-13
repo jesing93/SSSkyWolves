@@ -22,12 +22,19 @@ public class PlayerController : MonoBehaviour
     [Header("Data")]
     [SerializeField] private PlayerCameraData cameraData;
 
+    public bool isWhite;
+    private bool isInLight;
+    float lightTime;
+    float maxTimeToDie = 1;
+
     // References
     private Rigidbody rb;
     private PlayerAnimator panim;
     private Animator anim;
     private GameObject rel;
     private PlayerCamera cam;
+
+    public bool IsInLight { get => isInLight; set => isInLight = value; }
 
     void Start()
     {
@@ -41,6 +48,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Move();
+        LightTimeCheck();
     }
     void LateUpdate()
     {
@@ -92,6 +100,24 @@ public class PlayerController : MonoBehaviour
     public void OnInteract(Vector2 direction)
     {
 
+    }
+
+    private void LightTimeCheck()
+    {
+        if ((isWhite && isInLight) || (!isWhite && !isInLight))
+        {
+            lightTime = 0;
+        }
+        else
+        {
+            lightTime += Time.deltaTime;
+        }
+        if(lightTime >= maxTimeToDie)
+        {
+            //TODO: Die
+            Debug.Log("Die");
+            GameManager.Instance.WolfDeath();
+        }
     }
 
     private void Move()

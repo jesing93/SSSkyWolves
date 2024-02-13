@@ -8,7 +8,6 @@ public class InputManager : MonoBehaviour
 {
     public PlayerInput input;
     private PlayerController controller;
-    [SerializeField] private bool isWhite;
 
     private void Awake()
     {
@@ -16,7 +15,7 @@ public class InputManager : MonoBehaviour
         input = new();
         //Assign the controls to the player depending on the color selected
         //TODO: Assign the selected controls to the player instead of the default
-        if (isWhite)
+        if (controller.isWhite)
         {
             input.Player.MoveWASD.performed += ctx => controller.OnMove(ctx.ReadValue<Vector2>());
             input.Player.MoveWASD.canceled += ctx => controller.OnMove(Vector2.zero);
