@@ -7,11 +7,16 @@ public abstract class BaseInteraction : MonoBehaviour
 {
     //Region dedicated to the different Variables.
     #region Variables
+    [Tooltip("Where the wolf will snap to in order to interact")]
     [SerializeField] protected List<Transform> snapPoints;
+    [Tooltip("If the wolf needs to face a specific direction before interacting")]
+    [SerializeField] protected bool hasOrientation;
+    [Tooltip("All the colliders associated with the Interactable object")]
     [SerializeField] protected List<Collider> colliders;
+    [Tooltip("What action will the wolf do when interacting")]
     [SerializeField] protected InteractionType interactionType;
 
-    [SerializeField] protected bool canInteract;
+    protected bool canInteract;
 
     #endregion
 
@@ -48,7 +53,11 @@ public abstract class BaseInteraction : MonoBehaviour
 
     //Region dedicated to Custom methods.
     #region Custom Methods
+
+    //Method to start the interaction
     public abstract void InteractionEnter();
+
+    //Method to end the interaction
     public abstract void InteractionExit();
     #endregion
 

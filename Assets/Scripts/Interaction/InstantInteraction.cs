@@ -21,6 +21,7 @@ public  class InstantInteraction : BaseInteraction
 
     //Region dedicated to Custom methods.
     #region Custom Methods
+    //Method to start the interaction
     public override void InteractionEnter()
     {
         switch(interactionType)
@@ -30,6 +31,7 @@ public  class InstantInteraction : BaseInteraction
             default: break;
         }
     }
+    //Method to end the interaction
     public override void InteractionExit()
     {
         switch (interactionType)
