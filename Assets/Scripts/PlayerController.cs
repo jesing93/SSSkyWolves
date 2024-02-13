@@ -5,14 +5,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    #region Variables
     [Header("Movement")]
     [SerializeField] private float movementTensor;
     [SerializeField] private float movementDeath;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private bool calculateWithSine;
-    private float xInput;
-    private float zInput;
+    private Vector2 moveInputTarget;
+    private Vector2 moveInput;
 
     [Header("Adaptation")]
     [SerializeField] private LayerMask groundLayer;
@@ -33,16 +34,20 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private GameObject rel;
     private PlayerCamera cam;
+    #endregion
 
+    #region Getters / Setters
     public bool IsInLight { get => isInLight; set => isInLight = value; }
+    #endregion
 
+    #region Unity Functions
     void Start()
     {
         GetReferences();
     }
     private void Update()
     {
-        GetInputs();
+        InputsModifiers();
         AdaptToTheTerrain();
     }
     void FixedUpdate()
@@ -54,7 +59,9 @@ public class PlayerController : MonoBehaviour
     {
         panim.speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
     }
+    #endregion
 
+    #region Custom Methods
     private void GetReferences()
     {
         rb = GetComponent<Rigidbody>();
@@ -65,68 +72,31 @@ public class PlayerController : MonoBehaviour
         cam.SetUp(this.transform, cameraData);
     }
 
-    private void GetInputs()
+    //***** Inputs Zone *****//
+    public void OnMove(Vector2 moveInput)
     {
-        if (Input.GetKey(KeyCode.W)){
-            zInput = Mathf.MoveTowards(zInput, 1, Time.deltaTime * movementTensor);
-        }
-        else if(Input.GetKey(KeyCode.S))
-        {
-            zInput = Mathf.MoveTowards(zInput, -1, Time.deltaTime * movementTensor);
-        }
+        this.moveInputTarget = moveInput;
+    }
+    public void OnInteract()
+    {
+        Debug.Log("OnInteract");
+    }
+    private void InputsModifiers()
+    {
+        if(moveInputTarget == Vector2.zero)
+            moveInput = Vector2.MoveTowards(moveInput, Vector2.zero, Time.deltaTime * movementDeath);
         else
-        {
-            zInput = Mathf.MoveTowards(zInput, 0, Time.deltaTime * movementDeath);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            xInput = Mathf.MoveTowards(xInput, 1, Time.deltaTime * movementTensor);
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            xInput = Mathf.MoveTowards(xInput, -1, Time.deltaTime * movementTensor);
-        }
-        else
-        {
-            xInput = Mathf.MoveTowards(xInput, 0, Time.deltaTime * movementDeath);
-        }
+            moveInput = Vector2.MoveTowards(moveInput, moveInputTarget, Time.deltaTime * movementTensor);
     }
 
-    public void OnMove(Vector2 direction)
-    {
-
-    }
-
-    public void OnInteract(Vector2 direction)
-    {
-
-    }
-
-    private void LightTimeCheck()
-    {
-        if ((isWhite && isInLight) || (!isWhite && !isInLight))
-        {
-            lightTime = 0;
-        }
-        else
-        {
-            lightTime += Time.deltaTime;
-        }
-        if(lightTime >= maxTimeToDie)
-        {
-            //TODO: Die
-            Debug.Log("Die");
-            GameManager.Instance.WolfDeath();
-        }
-    }
-
+    //***** Movement *****//
     private void Move()
     {
         Vector3 direction;
         if (calculateWithSine)
-            direction = new((Mathf.Sin(xInput * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(xInput), 0, (Mathf.Sin(zInput * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(zInput));
+            direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
         else
-            direction = new(xInput, 0, zInput);
+            direction = new(moveInput.x, 0, moveInput.y);
 
         if(direction.magnitude > 1) direction.Normalize();
         direction *= movementSpeed;
@@ -166,5 +136,25 @@ public class PlayerController : MonoBehaviour
         rel.transform.LookAt(fPoint);
 
         transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(rel.transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)), adaptationSpeed * Time.deltaTime);
+    }
+    #endregion
+
+    //***** Others *****//
+    private void LightTimeCheck()
+    {
+        if ((isWhite && isInLight) || (!isWhite && !isInLight))
+        {
+            lightTime = 0;
+        }
+        else
+        {
+            lightTime += Time.deltaTime;
+        }
+        if (lightTime >= maxTimeToDie)
+        {
+            //TODO: Die
+            //Debug.Log("Die");
+            //GameManager.Instance.WolfDeath();
+        }
     }
 }
