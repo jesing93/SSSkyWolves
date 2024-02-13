@@ -35,6 +35,7 @@ public class LightSource : MonoBehaviour
 
     public bool CheckLight(bool isWhite)
     {
+        //TODO: Raycast checks
         if (isWhite)
         {
             return true;
