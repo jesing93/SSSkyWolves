@@ -27,9 +27,22 @@ public class LightSource : MonoBehaviour
 
     //Region dedicated to Custom methods.
     #region Custom Methods
+    /// <summary>
+    /// Turn On/Off the light
+    /// </summary>
     public void Switch()
     {
         isOn = !isOn;
+        lightSource.enabled = isOn;
+    }
+
+    /// <summary>
+    /// Turn On/Off the light to the desired value
+    /// </summary>
+    /// <param name="newState"></param>
+    public void Switch(bool newState)
+    {
+        isOn = newState;
         lightSource.enabled = isOn;
     }
 

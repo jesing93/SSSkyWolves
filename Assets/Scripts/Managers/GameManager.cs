@@ -6,10 +6,17 @@ public class GameManager : MonoBehaviour
 {
     //Region dedicated to the different Variables.
     #region Variables
+    //Singleton
     public static GameManager Instance;
-    private List<LightSource> lightSources;
+
+    //Components
     private PlayerController white;
     private PlayerController black;
+    [SerializeField] private GameObject whitePref;
+    [SerializeField] private GameObject blackPref;
+    private List<LightSource> lightSources;
+    private GameObject whiteSpawn;
+    private GameObject blackSpawn;
 
     #endregion
 
@@ -23,6 +30,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        whiteSpawn = GameObject.FindGameObjectWithTag("WhiteSpawn");
+        blackSpawn = GameObject.FindGameObjectWithTag("BlackSpawn");
+
+        //TODO: Instantiate players
+        //white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
+        //black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
     }
     private void Update()
     {
