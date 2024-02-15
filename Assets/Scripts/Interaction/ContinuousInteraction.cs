@@ -16,9 +16,8 @@ public class ContinuousInteraction : BaseInteraction
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         if (isBusy)
         {
             InteractionStay();
@@ -29,8 +28,9 @@ public class ContinuousInteraction : BaseInteraction
     //Region dedicated to Custom methods.
     #region Custom Methods
     //Method to start the interaction
-    public override void InteractionEnter()
+    public override IEnumerator InteractionEnter(PlayerController player)
     {
+        yield return StartCoroutine(base.InteractionEnter(player));
         isBusy = true;
 
         switch (interactionType)
@@ -43,6 +43,7 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             default: break;
         }
+        Debug.Log("I Reached here");
     }
     //Method repeated whilst the interaction takes place
     public void InteractionStay()
@@ -59,7 +60,7 @@ public class ContinuousInteraction : BaseInteraction
         }
     }
     //Method to end the interaction
-    public override void InteractionExit()
+    public override IEnumerator InteractionExit()
     {
         switch (interactionType)
         {
@@ -71,7 +72,10 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             default: break;
         }
+
+        base.InteractionExit();
         isBusy = false;
+        yield return StartCoroutine(base.InteractionExit());
     }
     #endregion
 }
