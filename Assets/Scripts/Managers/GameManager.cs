@@ -73,11 +73,11 @@ public class GameManager : MonoBehaviour
         {
             if (lightSource.IsOn)
             {
-                if (!isWhiteHit && lightSource.CheckLight(true))
+                if (!isWhiteHit && lightSource.CheckLight(white))
                 {
                     isWhiteHit = true;
                 }
-                if (lightSource.CheckLight(false))
+                if (lightSource.CheckLight(black))
                 {
                     isBlackHit = true;
                 }

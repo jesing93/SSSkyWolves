@@ -46,16 +46,36 @@ public class LightSource : MonoBehaviour
         lightSource.enabled = isOn;
     }
 
-    public bool CheckLight(bool isWhite)
+    public bool CheckLight(PlayerController player)
     {
+        List<bool> hits = new();
         //TODO: Raycast checks
-        if (isWhite)
+        //raycast first transform
+        hits.Add(true);
+        //raycast second transform
+        hits.Add(false);
+
+        if (hits[0] == true || hits[1] == true)
         {
-            return true;
+            if (player.isWhite)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            return true;
+            if (player.isWhite)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
     #endregion
