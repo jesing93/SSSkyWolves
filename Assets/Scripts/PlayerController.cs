@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
     [Header("Data")]
     [SerializeField] private PlayerCameraData cameraData;
 
+    [Header("Interaction")]
+    [SerializeField]private List<Transform> interactions;
+    private BaseInteraction currentInteraction;
+    private bool isBusy;
+
+    [Header("Other")]
     public bool isWhite;
     private bool isInLight;
     float lightTime;
@@ -41,6 +47,10 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Unity Functions
+    private void Awake()
+    {
+        interactions = new();
+    }
     void Start()
     {
         GetReferences();
@@ -77,13 +87,56 @@ public class PlayerController : MonoBehaviour
     {
         this.moveInputTarget = moveInput;
     }
+
+    //TODO:almacenar Interaciones
+    public void AddInteraction(Transform interaction)
+    {
+        interactions.Add(interaction);
+    }
+    public void RemoveInteraction(Transform interaction)
+    {
+        interactions.Remove(interaction);
+    }
+
+
+    //Might change later on
     public void OnInteract()
     {
-        Debug.Log("OnInteract");
+
+        if (interactions.Count > 0 && !isBusy)
+        {
+            Transform closestInteraction = interactions[0].transform;
+
+            //Checks for the closest Interactable in range
+            foreach (var interaction in interactions)
+                if (Vector3.Distance(interaction.position, transform.position) >= Vector3.Distance(closestInteraction.position, transform.position))
+                    closestInteraction = interaction.transform;
+
+            StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
+            currentInteraction = closestInteraction.GetComponent<BaseInteraction>();
+            isBusy = true;
+        }
+
+        else if (currentInteraction?.GetType() == typeof(ContinuousInteraction))
+        {
+            currentInteraction.InteractionExit();
+            currentInteraction = null;
+            isBusy = false;
+        }
     }
+
+    public void EndInteraction()
+    {
+        currentInteraction = null;
+        isBusy = false;
+    }
+
+
+
+
     private void InputsModifiers()
     {
-        if(moveInputTarget == Vector2.zero)
+        if (moveInputTarget == Vector2.zero)
             moveInput = Vector2.MoveTowards(moveInput, Vector2.zero, Time.deltaTime * movementDeath);
         else
             moveInput = Vector2.MoveTowards(moveInput, moveInputTarget, Time.deltaTime * movementTensor);
@@ -98,7 +151,7 @@ public class PlayerController : MonoBehaviour
         else
             direction = new(moveInput.x, 0, moveInput.y);
 
-        if(direction.magnitude > 1) direction.Normalize();
+        if (direction.magnitude > 1) direction.Normalize();
         direction *= movementSpeed;
 
         rel.transform.position = transform.position;
@@ -112,9 +165,9 @@ public class PlayerController : MonoBehaviour
 
     private void AdaptToTheTerrain()
     {
-        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,0.65f)), Vector3.down);
+        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, step, 0.65f)), Vector3.down);
         RaycastHit forwardHit;
-        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,-0.65f)), Vector3.down);
+        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, step, -0.65f)), Vector3.down);
         RaycastHit backwardHit;
 
         Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, step, 0.65f)), Vector3.down, Color.red);
@@ -123,11 +176,11 @@ public class PlayerController : MonoBehaviour
         Vector3 fPoint = forwardSensor.GetPoint(step);
         Vector3 bPoint = forwardSensor.GetPoint(step);
 
-        if(Physics.Raycast(forwardSensor, out forwardHit, step * 2,  groundLayer) && forwardHit.distance > 0.01f)
+        if (Physics.Raycast(forwardSensor, out forwardHit, step * 2, groundLayer) && forwardHit.distance > 0.01f)
         {
             fPoint = forwardHit.point;
         }
-        if(Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.01f)
+        if (Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.01f)
         {
             bPoint = backwardHit.point;
         }

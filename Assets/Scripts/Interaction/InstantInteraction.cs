@@ -6,7 +6,7 @@ public  class InstantInteraction : BaseInteraction
 {
     //Region dedicated to the different Variables.
     #region Variables
-
+    private float interactionLength;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -22,17 +22,19 @@ public  class InstantInteraction : BaseInteraction
     //Region dedicated to Custom methods.
     #region Custom Methods
     //Method to start the interaction
-    public override void InteractionEnter()
+    public override IEnumerator InteractionEnter(PlayerController player)
     {
+        base.InteractionEnter(player);
         switch(interactionType)
         {
             case InteractionType.Sniff:
                 break;
             default: break;
         }
+        yield return StartCoroutine(base.InteractionEnter(player));
     }
     //Method to end the interaction
-    public override void InteractionExit()
+    public override IEnumerator InteractionExit()
     {
         switch (interactionType)
         {
@@ -40,6 +42,8 @@ public  class InstantInteraction : BaseInteraction
                 break;
             default: break;
         }
+        base.InteractionExit();
+        yield return StartCoroutine(base.InteractionExit());
     }
     #endregion
 }

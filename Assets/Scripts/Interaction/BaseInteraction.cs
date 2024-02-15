@@ -16,6 +16,8 @@ public abstract class BaseInteraction : MonoBehaviour
     [Tooltip("What action will the wolf do when interacting")]
     [SerializeField] protected InteractionType interactionType;
 
+    protected PlayerController currentPlayer;
+
     protected bool canInteract;
 
     #endregion
@@ -27,26 +29,20 @@ public abstract class BaseInteraction : MonoBehaviour
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-
-    protected virtual void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && canInteract)
-        {
-            InteractionEnter();
-        }
-    }
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            canInteract = true;
+            other.GetComponent<PlayerController>().AddInteraction(this.transform);
+            Debug.Log("player has entered the range of " + gameObject.name);
         }
     }
     protected virtual void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            canInteract = false;
+            other.GetComponent<PlayerController>().RemoveInteraction(this.transform);
+            Debug.Log("player has left the range of " + gameObject.name);
         }
     }
     #endregion
@@ -55,10 +51,19 @@ public abstract class BaseInteraction : MonoBehaviour
     #region Custom Methods
 
     //Method to start the interaction
-    public abstract void InteractionEnter();
+    public virtual IEnumerator InteractionEnter(PlayerController player)
+    {
+        currentPlayer = player;
+        Debug.Log("player has interacted with " + gameObject.name);
+        yield return new WaitForSeconds(0);
+    }
 
     //Method to end the interaction
-    public abstract void InteractionExit();
+    public virtual IEnumerator InteractionExit()
+    {
+        currentPlayer = null;
+        yield return new WaitForSeconds(0);
+    }
     #endregion
 
     //Region dedicated to related Data
