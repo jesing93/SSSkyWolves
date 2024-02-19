@@ -8,6 +8,7 @@ public class LightSource : MonoBehaviour
     #region Variables
     [SerializeField] private bool isOn;
     private Light lightSource;
+    [SerializeField] private float lightIntensity;
 
     #endregion
 
@@ -27,22 +28,58 @@ public class LightSource : MonoBehaviour
 
     //Region dedicated to Custom methods.
     #region Custom Methods
+    /// <summary>
+    /// Turn On/Off the light
+    /// </summary>
     public void Switch()
     {
         isOn = !isOn;
         lightSource.enabled = isOn;
     }
 
-    public bool CheckLight(bool isWhite)
+    /// <summary>
+    /// Turn On/Off the light to the desired value
+    /// </summary>
+    /// <param name="newState"></param>
+    public void Switch(bool newState)
     {
+        isOn = newState;
+        lightSource.enabled = isOn;
+    }
+
+    public bool CheckLight(PlayerController player)
+    {
+        List<bool> hits = new();
         //TODO: Raycast checks
-        if (isWhite)
+        //raycast first transform
+        hits.Add(true);
+        Ray ray = new(transform.position, player.frontDetection.position - transform.position);
+        RaycastHit hit;
+        Physics.Raycast(ray, out hit, lightIntensity);
+        //raycast second transform
+        hits.Add(false);
+
+        if (hits[0] == true || hits[1] == true)
         {
-            return true;
+            if (player.isWhite)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            return true;
+            if (player.isWhite)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
     #endregion
