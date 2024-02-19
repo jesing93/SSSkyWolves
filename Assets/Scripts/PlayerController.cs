@@ -29,6 +29,9 @@ public class PlayerController : MonoBehaviour
     float maxTimeToDie = 1;
 
     // References
+    [Header("References")]
+    public Transform frontDetection;
+    public Transform backDetection;
     private Rigidbody rb;
     private PlayerAnimator panim;
     private Animator anim;

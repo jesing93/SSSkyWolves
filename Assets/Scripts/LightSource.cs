@@ -8,6 +8,7 @@ public class LightSource : MonoBehaviour
     #region Variables
     [SerializeField] private bool isOn;
     private Light lightSource;
+    [SerializeField] private float lightIntensity;
 
     #endregion
 
@@ -52,6 +53,9 @@ public class LightSource : MonoBehaviour
         //TODO: Raycast checks
         //raycast first transform
         hits.Add(true);
+        Ray ray = new(transform.position, player.frontDetection.position - transform.position);
+        RaycastHit hit;
+        Physics.Raycast(ray, out hit, lightIntensity);
         //raycast second transform
         hits.Add(false);
 
