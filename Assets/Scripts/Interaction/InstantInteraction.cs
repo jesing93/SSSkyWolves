@@ -6,7 +6,7 @@ public  class InstantInteraction : BaseInteraction
 {
     //Region dedicated to the different Variables.
     #region Variables
-    private float interactionLength;
+    
     #endregion
 
     //Region deidcated to the different Getters/Setters.

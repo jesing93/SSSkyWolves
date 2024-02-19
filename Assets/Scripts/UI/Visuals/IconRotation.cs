@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 public class IconRotation : MonoBehaviour
 {
     //Region dedicated to the different Variables.
@@ -20,7 +21,7 @@ public class IconRotation : MonoBehaviour
     #region Unity Functions
     private void Start()
     {
-
+        transform.DORotate(new Vector3(0, 180, 0), rotationSpeed).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
     }
 
     #endregion

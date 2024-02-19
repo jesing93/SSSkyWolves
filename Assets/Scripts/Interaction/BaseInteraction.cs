@@ -14,11 +14,13 @@ public abstract class BaseInteraction : MonoBehaviour
     [SerializeField] protected bool hasOrientation;
     [Tooltip("All the colliders associated with the Interactable object")]
     [SerializeField] protected List<Collider> colliders;
+    [SerializeField] protected List<Collider> triggers;
     [Tooltip("What action will the wolf do when interacting")]
     [SerializeField] protected InteractionType interactionType;
 
 
     [SerializeField] protected Animation enterAnimation;
+
     [SerializeField] protected Animation exitAnimation;
 
     [Tooltip("The Icon That Apears when getting close to the object")]
@@ -41,14 +43,27 @@ public abstract class BaseInteraction : MonoBehaviour
     protected virtual void Awake()
     {
         icon = GetComponentInChildren<Image>(true);
+        colliders = new();
+        foreach (Collider collider in GetComponents<Collider>())
+        {
+            if (collider.isTrigger)
+            {
+                colliders.Add(collider);
+            }
+            else
+            {
+                triggers.Add(collider);
+            }
+        }
 
     }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().AddInteraction(this.transform);
-            Debug.Log("player has entered the range of " + gameObject.name);
+
             icon.enabled = true;
         }
     }
@@ -57,7 +72,7 @@ public abstract class BaseInteraction : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().RemoveInteraction(this.transform);
-            Debug.Log("player has left the range of " + gameObject.name);
+
             icon.enabled = false;
         }
     }
@@ -70,15 +85,37 @@ public abstract class BaseInteraction : MonoBehaviour
     public virtual IEnumerator InteractionEnter(PlayerController player)
     {
         currentPlayer = player;
-        Debug.Log("player has interacted with " + gameObject.name);
-        yield return new WaitForSeconds(0);
+
+        icon.enabled = false;
+
+        foreach (Collider collider in triggers)
+        {
+            collider.enabled = false;
+        }
+
+        currentPlayer.RemoveInteraction(this.transform);
+
+        yield return new WaitForSeconds(/*enterAnimation.clip.length*/ 0);
+
+        
     }
 
     //Method to end the interaction
     public virtual IEnumerator InteractionExit()
     {
+
+
+
+        yield return new WaitForSeconds(/*exitAnimation.clip.length*/ 0 );
+
+        foreach (Collider collider in triggers)
+        {
+            collider.enabled = true;
+        }
+
+        icon.enabled = false;
+
         currentPlayer = null;
-        yield return new WaitForSeconds(0);
     }
     #endregion
 

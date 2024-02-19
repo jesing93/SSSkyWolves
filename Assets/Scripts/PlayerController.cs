@@ -25,8 +25,12 @@ public class PlayerController : MonoBehaviour
 
     [Header("Interaction")]
     [SerializeField]private List<Transform> interactions;
+
+    [SerializeField] private Transform playerSnap;
+
     private BaseInteraction currentInteraction;
     private bool isBusy;
+    private bool inLockedInteraction;
 
     [Header("Other")]
     public bool isWhite;
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
 
     #region Getters / Setters
     public bool IsInLight { get => isInLight; set => isInLight = value; }
+    public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
     #endregion
 
     #region Unity Functions
@@ -57,6 +62,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         GetReferences();
+        Debug.Log(PlayerSnap);
     }
     private void Update()
     {
@@ -115,14 +121,17 @@ public class PlayerController : MonoBehaviour
                 if (Vector3.Distance(interaction.position, transform.position) >= Vector3.Distance(closestInteraction.position, transform.position))
                     closestInteraction = interaction.transform;
 
-            StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
             currentInteraction = closestInteraction.GetComponent<BaseInteraction>();
+            StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
+            
+            rb.velocity = Vector3.zero;
             isBusy = true;
         }
 
         else if (currentInteraction?.GetType() == typeof(ContinuousInteraction))
         {
-            currentInteraction.InteractionExit();
+            
+            StartCoroutine(currentInteraction.InteractionExit());
             currentInteraction = null;
             isBusy = false;
         }
@@ -148,22 +157,25 @@ public class PlayerController : MonoBehaviour
     //***** Movement *****//
     private void Move()
     {
-        Vector3 direction;
-        if (calculateWithSine)
-            direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
-        else
-            direction = new(moveInput.x, 0, moveInput.y);
+        if (!inLockedInteraction)
+        {
+            Vector3 direction;
+            if (calculateWithSine)
+                direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
+            else
+                direction = new(moveInput.x, 0, moveInput.y);
 
-        if (direction.magnitude > 1) direction.Normalize();
-        direction *= movementSpeed;
+            if (direction.magnitude > 1) direction.Normalize();
+            direction *= movementSpeed;
 
-        rel.transform.position = transform.position;
-        rel.transform.LookAt(transform.position + direction);
+            rel.transform.position = transform.position;
+            rel.transform.LookAt(transform.position + direction);
 
-        direction.y = rb.velocity.y;
-        rb.velocity = direction;
+            direction.y = rb.velocity.y;
+            rb.velocity = direction;
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+        }
     }
 
     private void AdaptToTheTerrain()

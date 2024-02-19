@@ -30,6 +30,9 @@ public class ContinuousInteraction : BaseInteraction
     //Method to start the interaction
     public override IEnumerator InteractionEnter(PlayerController player)
     {
+        Debug.Log(player.PlayerSnap.position);
+        transform.position = player.PlayerSnap.position;
+
         yield return StartCoroutine(base.InteractionEnter(player));
         isBusy = true;
 
@@ -40,10 +43,15 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             case (InteractionType.GrabSmall):
                 //TODO: Make the wolf the parent of the wolf, letting it move freely
+                transform.parent = player.transform;
+
+                foreach (Collider collider in colliders)
+                {
+                    collider.enabled = false;
+                }
                 break;
             default: break;
         }
-        Debug.Log("I Reached here");
     }
     //Method repeated whilst the interaction takes place
     public void InteractionStay()
@@ -62,17 +70,22 @@ public class ContinuousInteraction : BaseInteraction
     //Method to end the interaction
     public override IEnumerator InteractionExit()
     {
+        
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
-                //TODO: Unparents the objects
+                transform.parent = null;
+
+                foreach (Collider collider in colliders)
+                {
+                    collider.enabled = true;
+                }
                 break;
             default: break;
         }
-
         base.InteractionExit();
         isBusy = false;
         yield return StartCoroutine(base.InteractionExit());
