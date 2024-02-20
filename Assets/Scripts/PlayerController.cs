@@ -12,18 +12,30 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private bool calculateWithSine;
+    [SerializeField] private float gravity;
     private Vector2 moveInputTarget;
     private Vector2 moveInput;
+    private float yAxis;
+    private Vector2 yAxisCap;
 
     [Header("Adaptation")]
+    [SerializeField] private Vector3 groundSensorsOffset;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private float step;
+    [SerializeField] private float anticipation;
+    [SerializeField] private float adaptationStep;
     [SerializeField] private float adaptationSpeed;
+    [SerializeField] private Transform wolfModel;
+
+    [Header("Steps")]
+    [SerializeField] private Vector3 stepSensorsOffset;
+    [SerializeField] private float step;
 
     [Header("Data")]
     [SerializeField] private PlayerCameraData cameraData;
 
+    [Header("Others")]
     public bool isWhite;
+
     private bool isInLight;
     float lightTime;
     float maxTimeToDie = 1;
@@ -48,16 +60,23 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         InputsModifiers();
-        AdaptToTheTerrain();
+        
     }
     void FixedUpdate()
     {
+        
         Move();
         LightTimeCheck();
+        OvercomeStep();
+
     }
     void LateUpdate()
     {
-        panim.speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+        CheckGround();
+        Adaptation();
+        
+        panim.Speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+        panim.MoveInput = moveInput;
     }
     #endregion
 
@@ -90,6 +109,27 @@ public class PlayerController : MonoBehaviour
     }
 
     //***** Movement *****//
+
+    // Comprueba el suelo en las direcciones establecidas y cambia el cap del ejeY según el resultado.
+    private void CheckGround()
+    {
+        Vector3Int[] directions = new Vector3Int[] { new (-1, 1, 1), new(1, 1, 1), new(-1, 1, -1), new(1, 1, -1) };
+        float lessDistance = 50;
+
+        for(int i = 0; i < directions.Length; i++)
+        {
+            Ray groundRay = new Ray(transform.position + transform.TransformDirection(new Vector3(groundSensorsOffset.x * directions[i].x, 0, groundSensorsOffset.z * directions[i].z) + Vector3.up * groundSensorsOffset.y * directions[i].y), Vector3.down);
+            RaycastHit groundRayHit;
+            if (Physics.Raycast(groundRay, out groundRayHit, adaptationStep, groundLayer))
+            {
+                if(groundRayHit.distance < lessDistance) lessDistance = groundRayHit.distance;
+            }
+        }
+        if (lessDistance < adaptationStep) yAxisCap.x = 0;
+        else yAxisCap.x = -25;
+    }
+
+    // Setea la velocidad del rigidbody en función de los ejes de entrada y la gravedad calculada. Además rota al personaje hacia la dirección a la que se mueve.
     private void Move()
     {
         Vector3 direction;
@@ -98,36 +138,39 @@ public class PlayerController : MonoBehaviour
         else
             direction = new(moveInput.x, 0, moveInput.y);
 
-        if(direction.magnitude > 1) direction.Normalize();
+        if (direction.magnitude > 1) direction.Normalize();
         direction *= movementSpeed;
 
         rel.transform.position = transform.position;
         rel.transform.LookAt(transform.position + direction);
 
-        direction.y = rb.velocity.y;
+        yAxis = Mathf.Clamp(yAxis, yAxisCap.x, 25);
+        direction.y = yAxis;
         rb.velocity = direction;
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.fixedDeltaTime);
+
+        yAxis += gravity * Time.fixedDeltaTime;
     }
 
-    private void AdaptToTheTerrain()
+    // Calcula la inclinación media del terreno y rota el modelo 3D hasta alcanzarla.
+    private void Adaptation()
     {
-        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,0.65f)), Vector3.down);
+        Ray forwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, groundSensorsOffset.z + anticipation)), wolfModel.transform.TransformDirection(Vector3.down));
         RaycastHit forwardHit;
-        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0,step,-0.65f)), Vector3.down);
+        Ray backwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, -groundSensorsOffset.z + anticipation / 2)), wolfModel.transform.TransformDirection(Vector3.down));
         RaycastHit backwardHit;
 
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, step, 0.65f)), Vector3.down, Color.red);
-        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, step, -0.65f)), Vector3.down, Color.red);
+        Vector3 fPoint = forwardSensor.GetPoint(adaptationStep);
+        fPoint.y = transform.position.y;
+        Vector3 bPoint = forwardSensor.GetPoint(adaptationStep);
+        bPoint.y = transform.position.y;
 
-        Vector3 fPoint = forwardSensor.GetPoint(step);
-        Vector3 bPoint = forwardSensor.GetPoint(step);
-
-        if(Physics.Raycast(forwardSensor, out forwardHit, step * 2,  groundLayer) && forwardHit.distance > 0.01f)
+        if (Physics.Raycast(forwardSensor, out forwardHit, adaptationStep * 2, groundLayer) && forwardHit.distance > 0.005f)
         {
             fPoint = forwardHit.point;
         }
-        if(Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.01f)
+        if (Physics.Raycast(backwardSensor, out backwardHit, adaptationStep * 2, groundLayer) && backwardHit.distance > 0.005f)
         {
             bPoint = backwardHit.point;
         }
@@ -135,8 +178,34 @@ public class PlayerController : MonoBehaviour
         rel.transform.position = bPoint;
         rel.transform.LookAt(fPoint);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(rel.transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z)), adaptationSpeed * Time.deltaTime);
+        wolfModel.transform.rotation = Quaternion.RotateTowards(wolfModel.transform.rotation, Quaternion.Euler(new Vector3(rel.transform.eulerAngles.x, wolfModel.transform.eulerAngles.y, wolfModel.transform.eulerAngles.z)), adaptationSpeed * moveInput.magnitude * movementSpeed * Time.deltaTime);
     }
+
+    // Busca escalones o diferencias de altura que pueda sortear, establece la posicion del collider en la más alta y mueve al personaje hacia ella.
+    private void OvercomeStep()
+    {
+        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, stepSensorsOffset.z)) + Vector3.up * step, Vector3.down);
+        RaycastHit forwardHit;
+        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, -stepSensorsOffset.z)) + Vector3.up * step, Vector3.down);
+        RaycastHit backwardHit;
+
+        float greaterHeight;
+        Vector3 lastPosition = transform.position;
+
+        if (Physics.Raycast(forwardSensor, out forwardHit, step * 2, groundLayer) && forwardHit.distance > 0.005f && Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.005f)
+        {
+            greaterHeight = Mathf.Max(forwardHit.point.y, backwardHit.point.y);
+            Debug.Log(greaterHeight - transform.position.y);
+        }
+        else {
+            greaterHeight = transform.position.y;
+        }
+        float capsuleOffset = greaterHeight - transform.position.y;
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, greaterHeight, transform.position.z), moveInput.magnitude * movementSpeed /2 * Time.fixedDeltaTime);
+        transform.GetComponent<CapsuleCollider>().center = new Vector3(0, 0.5f + capsuleOffset, 0);
+        //wolfModel.GetChild(0).position -= new Vector3(0,transform.position.y - lastPosition.y,0);
+    }
+
     #endregion
 
     //***** Others *****//
