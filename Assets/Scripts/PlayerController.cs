@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
     #region Getters / Setters
     public bool IsInLight { get => isInLight; set => isInLight = value; }
     public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
+    public bool InLockedInteraction { get => inLockedInteraction; set => inLockedInteraction = value; }
     #endregion
 
     #region Unity Functions
@@ -124,7 +125,6 @@ public class PlayerController : MonoBehaviour
             currentInteraction = closestInteraction.GetComponent<BaseInteraction>();
             StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
             
-            rb.velocity = Vector3.zero;
             isBusy = true;
         }
 
@@ -157,8 +157,6 @@ public class PlayerController : MonoBehaviour
     //***** Movement *****//
     private void Move()
     {
-        if (!inLockedInteraction)
-        {
             Vector3 direction;
             if (calculateWithSine)
                 direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
@@ -175,7 +173,6 @@ public class PlayerController : MonoBehaviour
             rb.velocity = direction;
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
-        }
     }
 
     private void AdaptToTheTerrain()

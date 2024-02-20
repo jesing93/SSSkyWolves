@@ -104,8 +104,6 @@ public abstract class BaseInteraction : MonoBehaviour
     public virtual IEnumerator InteractionExit()
     {
 
-
-
         yield return new WaitForSeconds(/*exitAnimation.clip.length*/ 0 );
 
         foreach (Collider collider in triggers)
@@ -113,10 +111,11 @@ public abstract class BaseInteraction : MonoBehaviour
             collider.enabled = true;
         }
 
-        icon.enabled = false;
+        icon.enabled = true;
 
         currentPlayer = null;
     }
+
     #endregion
 
     //Region dedicated to related Data

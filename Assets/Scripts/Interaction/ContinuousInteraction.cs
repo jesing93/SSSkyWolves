@@ -30,19 +30,18 @@ public class ContinuousInteraction : BaseInteraction
     //Method to start the interaction
     public override IEnumerator InteractionEnter(PlayerController player)
     {
-        Debug.Log(player.PlayerSnap.position);
-        transform.position = player.PlayerSnap.position;
-
         yield return StartCoroutine(base.InteractionEnter(player));
         isBusy = true;
 
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
+                player.InLockedInteraction = true;
                 //TODO: Make the object the parent of the wolf, limiting its movement
                 break;
             case (InteractionType.GrabSmall):
                 //TODO: Make the wolf the parent of the wolf, letting it move freely
+                transform.position = player.PlayerSnap.position;
                 transform.parent = player.transform;
 
                 foreach (Collider collider in colliders)
@@ -74,6 +73,7 @@ public class ContinuousInteraction : BaseInteraction
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
+                currentPlayer.InLockedInteraction = false;
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
