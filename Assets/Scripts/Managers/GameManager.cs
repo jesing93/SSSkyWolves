@@ -32,8 +32,11 @@ public class GameManager : MonoBehaviour
         Instance = this;
         whiteSpawn = GameObject.FindGameObjectWithTag("WhiteSpawn");
         blackSpawn = GameObject.FindGameObjectWithTag("BlackSpawn");
+    }
 
-        //TODO: Instantiate players
+    private void Start()
+    {
+        //Instantiate players
         white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
         black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
     }

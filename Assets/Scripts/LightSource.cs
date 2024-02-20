@@ -9,6 +9,7 @@ public class LightSource : MonoBehaviour
     [SerializeField] private bool isOn;
     private Light lightSource;
     [SerializeField] private float lightIntensity;
+    public DetectionLightType lightType;
 
     #endregion
 
@@ -55,10 +56,14 @@ public class LightSource : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Check the light line of vision to the selected player
+    /// </summary>
+    /// <param name="player">Player to check</param>
+    /// <returns></returns>
     public bool CheckLight(PlayerController player)
     {
         List<bool> hits = new();
-        //TODO: Raycast checks
         //raycast front transform
         hits.Add(CheckDetetionPoint(player.frontDetection.position, player.isWhite));
         //raycast back transform
@@ -76,10 +81,41 @@ public class LightSource : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Throw a raycast to the players detection point to check line of sight
+    /// </summary>
+    /// <param name="detectionPoint">Target point to shoot</param>
+    /// <param name="isWhite">Whish player we are checking</param>
+    /// <returns></returns>
     private bool CheckDetetionPoint(Vector3 detectionPoint, bool isWhite)
     {
+
+        if (lightType == DetectionLightType.Spot) //If spotlight
+        {
+            //If not in light cone
+            if(Vector3.Angle(transform.forward, (detectionPoint - transform.position).normalized) > lightSource.spotAngle/2)
+            {
+                return false;
+            }
+        }
+        else if (lightType == DetectionLightType.Directional) //If directional
+        {
+            Ray skyRay = new(detectionPoint, transform.position + (-lightSource.transform.forward * 100));
+            Debug.DrawRay(detectionPoint, transform.position + (-lightSource.transform.forward * 100), Color.red, 1f);
+            //Shoot ray to sky
+            if (Physics.Raycast(skyRay, 100))
+            {
+                //If don't see sky
+                return false;
+            }
+            Debug.DrawRay(transform.position + (-lightSource.transform.forward * 100),Vector3.down * 5, Color.blue, 1f);
+            //If see sky
+            return true;
+        }
+
         Ray ray = new(transform.position, detectionPoint - transform.position);
         Debug.DrawRay(transform.position, detectionPoint - transform.position, Color.red, 1f);
+        //Shoot ray to wolf
         if (Physics.Raycast(ray, out RaycastHit hit, lightIntensity))
         {
             //If hit with the player
@@ -89,6 +125,15 @@ public class LightSource : MonoBehaviour
             }
         }
         return false;
+    }
+    #endregion
+
+    #region Data
+    public enum DetectionLightType
+    {
+        Point,
+        Spot,
+        Directional
     }
     #endregion
 }
