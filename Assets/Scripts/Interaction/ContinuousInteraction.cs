@@ -7,6 +7,7 @@ public class ContinuousInteraction : BaseInteraction
     //Region dedicated to the different Variables.
     #region Variables
     private bool isBusy;
+    [SerializeField]private Transform currentSnapPoint;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -37,6 +38,15 @@ public class ContinuousInteraction : BaseInteraction
         {
             case InteractionType.GrabLarge:
                 player.InLockedInteraction = true;
+                currentPlayer.RestrictedInteraction = true;
+                if (hasOrientation)
+                {
+                    ClosestSnapPoint();
+                    currentPlayer.transform.rotation = currentSnapPoint.transform.rotation;
+
+                    currentPlayer.transform.position = new Vector3(currentSnapPoint.transform.position.x,player.transform.position.y, currentSnapPoint.transform.position.z);
+                }
+
                 //TODO: Make the object the parent of the wolf, limiting its movement
                 break;
             case (InteractionType.GrabSmall):
@@ -69,11 +79,12 @@ public class ContinuousInteraction : BaseInteraction
     //Method to end the interaction
     public override IEnumerator InteractionExit()
     {
-        
+
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
                 currentPlayer.InLockedInteraction = false;
+                currentPlayer.RestrictedInteraction = false;
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
@@ -89,6 +100,16 @@ public class ContinuousInteraction : BaseInteraction
         base.InteractionExit();
         isBusy = false;
         yield return StartCoroutine(base.InteractionExit());
+    }
+
+    public void ClosestSnapPoint()
+    {
+
+        Transform closestInteraction = snapPoints[0].transform;
+        foreach (var snapPoint in snapPoints)
+                if (Vector3.Distance(closestInteraction.position, currentPlayer.transform.position) >= Vector3.Distance(snapPoint.position, currentPlayer.transform.position))
+                    closestInteraction = snapPoint.transform;
+        currentSnapPoint = closestInteraction;
     }
     #endregion
 }

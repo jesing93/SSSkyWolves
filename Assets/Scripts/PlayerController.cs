@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private BaseInteraction currentInteraction;
     private bool isBusy;
     private bool inLockedInteraction;
+    private bool restrictedInteraction;
 
     [Header("Other")]
     public bool isWhite;
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
     public bool IsInLight { get => isInLight; set => isInLight = value; }
     public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
     public bool InLockedInteraction { get => inLockedInteraction; set => inLockedInteraction = value; }
+    public bool RestrictedInteraction { get => restrictedInteraction; set => restrictedInteraction = value; }
     #endregion
 
     #region Unity Functions
@@ -157,6 +159,8 @@ public class PlayerController : MonoBehaviour
     //***** Movement *****//
     private void Move()
     {
+        if (!inLockedInteraction)
+        {
             Vector3 direction;
             if (calculateWithSine)
                 direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
@@ -173,6 +177,13 @@ public class PlayerController : MonoBehaviour
             rb.velocity = direction;
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+        }
+        else if (RestrictedInteraction)
+        {
+            Debug.Log("restricted movement");
+
+
+        }
     }
 
     private void AdaptToTheTerrain()

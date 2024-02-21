@@ -46,7 +46,7 @@ public abstract class BaseInteraction : MonoBehaviour
         colliders = new();
         foreach (Collider collider in GetComponents<Collider>())
         {
-            if (collider.isTrigger)
+            if (!collider.isTrigger)
             {
                 colliders.Add(collider);
             }
