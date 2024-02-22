@@ -49,6 +49,9 @@ public class PlayerController : MonoBehaviour
     float lightTime;
     float maxTimeToDie = 1;
 
+    public GameObject g1;
+    public GameObject g2;
+
     // References
     [Header("References")]
     public Transform frontDetection;
@@ -184,12 +187,12 @@ public class PlayerController : MonoBehaviour
         {
             Ray groundRay = new Ray(transform.position + transform.TransformDirection(new Vector3(groundSensorsOffset.x * directions[i].x, 0, groundSensorsOffset.z * directions[i].z) + Vector3.up * groundSensorsOffset.y * directions[i].y), Vector3.down);
             RaycastHit groundRayHit;
-            if (Physics.Raycast(groundRay, out groundRayHit, adaptationStep, groundLayer))
+            if (Physics.Raycast(groundRay, out groundRayHit, step, groundLayer))
             {
                 if(groundRayHit.distance < lessDistance) lessDistance = groundRayHit.distance;
             }
         }
-        if (lessDistance < adaptationStep) yAxisCap.x = 0;
+        if (lessDistance < step) yAxisCap.x = 0;
         else yAxisCap.x = -25;
     }
 
@@ -218,25 +221,47 @@ public class PlayerController : MonoBehaviour
     // Calcula la inclinaci�n media del terreno y rota el modelo 3D hasta alcanzarla.
     private void Adaptation()
     {
-        Ray forwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, groundSensorsOffset.z + anticipation)), wolfModel.transform.TransformDirection(Vector3.down));
+        //Ray forwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, groundSensorsOffset.z + anticipation)), wolfModel.transform.TransformDirection(Vector3.down));
+        //RaycastHit forwardHit;
+        //Ray backwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, -groundSensorsOffset.z + anticipation / 2)), wolfModel.transform.TransformDirection(Vector3.down));
+        //RaycastHit backwardHit;
+        Ray forwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, groundSensorsOffset.z + anticipation)) + Vector3.up * adaptationStep * 2, transform.TransformDirection(Vector3.down));
         RaycastHit forwardHit;
-        Ray backwardSensor = new(transform.position + wolfModel.transform.TransformDirection(new Vector3(0, adaptationStep, -groundSensorsOffset.z + anticipation / 2)), wolfModel.transform.TransformDirection(Vector3.down));
+        Ray backwardSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, -groundSensorsOffset.z + anticipation / 2)) + Vector3.up * adaptationStep * 2, transform.TransformDirection(Vector3.down));
         RaycastHit backwardHit;
+        Ray forwardShortSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, groundSensorsOffset.z)) + Vector3.up * adaptationStep, Vector3.down);
+        RaycastHit forwardShortHit;
+        Ray backwardShortSensor = new(transform.position + transform.TransformDirection(new Vector3(0, 0, -groundSensorsOffset.z)) + Vector3.up * adaptationStep, Vector3.down);
+        RaycastHit backwardShortHit;
 
-        Vector3 fPoint = forwardSensor.GetPoint(adaptationStep);
-        fPoint.y = transform.position.y;
-        Vector3 bPoint = forwardSensor.GetPoint(adaptationStep);
-        bPoint.y = transform.position.y;
+        Vector3 fPoint = forwardSensor.GetPoint(adaptationStep * 2);
+        //fPoint.y = transform.position.y;
+        Vector3 bPoint = forwardSensor.GetPoint(adaptationStep * 2);
+        //bPoint.y = transform.position.y;
 
-        if (Physics.Raycast(forwardSensor, out forwardHit, adaptationStep * 2, groundLayer) && forwardHit.distance > 0.005f)
+        if (Physics.Raycast(forwardSensor, out forwardHit, adaptationStep * 4, groundLayer) && forwardHit.distance > 0.005f)
         {
+            if(Mathf.Abs(forwardHit.point.y - transform.position.y) < adaptationStep)
             fPoint = forwardHit.point;
         }
-        if (Physics.Raycast(backwardSensor, out backwardHit, adaptationStep * 2, groundLayer) && backwardHit.distance > 0.005f)
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0, groundSensorsOffset.z + anticipation)) + Vector3.up * adaptationStep * 2, transform.TransformDirection(Vector3.down) * adaptationStep * 4, Color.red, Time.deltaTime);
+        //else if (Physics.Raycast(forwardShortSensor, out forwardShortHit, adaptationStep * 4, groundLayer) && forwardShortHit.distance > 0.005f)
+        //{
+        //    fPoint = forwardShortHit.point;
+        //}
+        if (Physics.Raycast(backwardSensor, out backwardHit, adaptationStep * 4, groundLayer) && backwardHit.distance > 0.005f)
         {
-            bPoint = backwardHit.point;
+            if (Mathf.Abs(backwardHit.point.y - transform.position.y) < adaptationStep)
+                bPoint = backwardHit.point;
         }
+        Debug.DrawRay(transform.position + transform.TransformDirection(new Vector3(0, 0, -groundSensorsOffset.z + anticipation/2)) + Vector3.up * adaptationStep * 2, transform.TransformDirection(Vector3.down) * adaptationStep * 4, Color.red, Time.deltaTime);
 
+        //else if (Physics.Raycast(backwardShortSensor, out backwardShortHit, adaptationStep * 4, groundLayer) && backwardShortHit.distance > 0.005f)
+        //{
+        //    bPoint = backwardShortHit.point;
+        //}
+        g1.transform.position = fPoint;
+        g2.transform.position = bPoint;
         rel.transform.position = bPoint;
         rel.transform.LookAt(fPoint);
 
@@ -265,7 +290,7 @@ public class PlayerController : MonoBehaviour
         float capsuleOffset = greaterHeight - transform.position.y;
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(transform.position.x, greaterHeight, transform.position.z), moveInput.magnitude * movementSpeed /2 * Time.fixedDeltaTime);
         transform.GetComponent<CapsuleCollider>().center = new Vector3(0, 0.5f + capsuleOffset, 0);
-        //wolfModel.GetChild(0).position -= new Vector3(0,transform.position.y - lastPosition.y,0);
+        wolfModel.GetChild(0).position -= new Vector3(0, transform.position.y - lastPosition.y, 0);          
     }
 
     #endregion
