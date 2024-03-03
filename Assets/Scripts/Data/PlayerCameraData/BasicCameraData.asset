@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb059e7a05364884f99627b3c980979a, type: 3}
   m_Name: BasicCameraData
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 7, z: -6}
-  localOffset: {x: 0, y: 0, z: 1}
-  tensor: 2
+  offset: {x: 0, y: 5, z: -6}
+  localOffset: {x: 0, y: 0, z: 2}
+  tensor: 4
