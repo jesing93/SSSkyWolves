@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private PlayerController black;
     [SerializeField] private GameObject whitePref;
     [SerializeField] private GameObject blackPref;
-    private List<LightSource> lightSources;
+    private List<LightSource> lightSources = new();
     private GameObject whiteSpawn;
     private GameObject blackSpawn;
 
@@ -32,12 +32,15 @@ public class GameManager : MonoBehaviour
         Instance = this;
         whiteSpawn = GameObject.FindGameObjectWithTag("WhiteSpawn");
         blackSpawn = GameObject.FindGameObjectWithTag("BlackSpawn");
-
-        //TODO: Instantiate players
-        //white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
-        //black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
     }
-    private void Update()
+
+    private void Start()
+    {
+        //Instantiate players
+        white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
+        black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
+    }
+    private void FixedUpdate()
     {
         CheckLights();
     }
@@ -77,7 +80,7 @@ public class GameManager : MonoBehaviour
                 {
                     isWhiteHit = true;
                 }
-                if (lightSource.CheckLight(black))
+                if (!isBlackHit && lightSource.CheckLight(black))
                 {
                     isBlackHit = true;
                 }

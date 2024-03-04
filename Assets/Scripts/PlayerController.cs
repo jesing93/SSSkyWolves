@@ -309,7 +309,7 @@ public class PlayerController : MonoBehaviour
         if (lightTime >= maxTimeToDie)
         {
             //TODO: Die
-            //Debug.Log("Die");
+            Debug.Log("Die: "+isWhite);
             //GameManager.Instance.WolfDeath();
         }
     }
