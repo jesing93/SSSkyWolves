@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
             
             isBusy = true;
+            rb.velocity = Vector3.zero;
         }
 
         else if (currentInteraction?.GetType() == typeof(ContinuousInteraction))
@@ -162,10 +164,16 @@ public class PlayerController : MonoBehaviour
         if (!inLockedInteraction)
         {
             Vector3 direction;
-            if (calculateWithSine)
-                direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
+            if (restrictedInteraction)
+            {
+                Transform snapPoint = currentInteraction.ConvertTo<ContinuousInteraction>().CurrentSnapPoint.transform;
+                direction = new Vector3(0, 0, moveInput.y);
+                direction = Quaternion.LookRotation(snapPoint.forward, snapPoint.up) * direction;
+            }
             else
-                direction = new(moveInput.x, 0, moveInput.y);
+            {
+                direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
+            }
 
             if (direction.magnitude > 1) direction.Normalize();
             direction *= movementSpeed;
@@ -174,15 +182,11 @@ public class PlayerController : MonoBehaviour
             rel.transform.LookAt(transform.position + direction);
 
             direction.y = rb.velocity.y;
+
             rb.velocity = direction;
-
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
-        }
-        else if (RestrictedInteraction)
-        {
-            Debug.Log("restricted movement");
-
-
+            if (!restrictedInteraction)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
+            Debug.Log(rb.velocity);
         }
     }
 

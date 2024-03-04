@@ -8,11 +8,13 @@ public class ContinuousInteraction : BaseInteraction
     #region Variables
     private bool isBusy;
     [SerializeField]private Transform currentSnapPoint;
+
+
     #endregion
 
     //Region deidcated to the different Getters/Setters.
     #region Getters/Setters
-
+    public Transform CurrentSnapPoint { get => currentSnapPoint; set => currentSnapPoint = value; }
     #endregion
 
     //Region dedicated to methods native to Unity.
@@ -37,16 +39,17 @@ public class ContinuousInteraction : BaseInteraction
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
-                player.InLockedInteraction = true;
                 currentPlayer.RestrictedInteraction = true;
                 if (hasOrientation)
                 {
                     ClosestSnapPoint();
-                    currentPlayer.transform.rotation = currentSnapPoint.transform.rotation;
+                    currentPlayer.transform.rotation = CurrentSnapPoint.transform.rotation;
 
-                    currentPlayer.transform.position = new Vector3(currentSnapPoint.transform.position.x,player.transform.position.y, currentSnapPoint.transform.position.z);
+                    Vector3 offset = player.transform.position - player.PlayerSnap.position;
+
+                    currentPlayer.transform.position = new Vector3(CurrentSnapPoint.transform.position.x + offset.x ,player.transform.position.y, CurrentSnapPoint.transform.position.z + offset.z);
                 }
-
+                transform.parent = player.transform;
                 //TODO: Make the object the parent of the wolf, limiting its movement
                 break;
             case (InteractionType.GrabSmall):
@@ -83,7 +86,7 @@ public class ContinuousInteraction : BaseInteraction
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
-                currentPlayer.InLockedInteraction = false;
+                transform.parent = null;
                 currentPlayer.RestrictedInteraction = false;
                 //TODO: Unparents the objects 
                 break;
@@ -109,7 +112,7 @@ public class ContinuousInteraction : BaseInteraction
         foreach (var snapPoint in snapPoints)
                 if (Vector3.Distance(closestInteraction.position, currentPlayer.transform.position) >= Vector3.Distance(snapPoint.position, currentPlayer.transform.position))
                     closestInteraction = snapPoint.transform;
-        currentSnapPoint = closestInteraction;
+        CurrentSnapPoint = closestInteraction;
     }
     #endregion
 }
