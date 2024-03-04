@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float step;
 
     [Header("Data")]
-    [SerializeField] private PlayerCameraData cameraData;
+    //[SerializeField] private PlayerCameraData cameraData;
 
     [Header("Interaction")]
     [SerializeField]private List<Transform> interactions;
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimator panim;
     private Animator anim;
     private GameObject rel;
-    private PlayerCamera cam;
+    //private PlayerCamera cam;
     #endregion
 
     #region Getters / Setters
@@ -106,8 +106,8 @@ public class PlayerController : MonoBehaviour
         panim = GetComponent<PlayerAnimator>();
         anim = transform.GetChild(0).GetComponent<Animator>();
         rel = new GameObject();
-        cam = new GameObject().AddComponent<PlayerCamera>();
-        cam.SetUp(this.transform, cameraData);
+        //cam = new GameObject().AddComponent<PlayerCamera>();
+        //cam.SetUp(this.transform, cameraData);
     }
 
     //***** Inputs Zone *****//
