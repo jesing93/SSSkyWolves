@@ -268,12 +268,20 @@ MonoBehaviour:
   movementSpeed: 3
   rotationSpeed: 250
   calculateWithSine: 1
+  gravity: 0
+  groundSensorsOffset: {x: 0, y: 0, z: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  step: 0.5
+  anticipation: 0
+  adaptationStep: 0
   adaptationSpeed: 50
+  wolfModel: {fileID: 2522479577721023261}
+  stepSensorsOffset: {x: 0, y: 0, z: 0}
+  step: 0.5
   cameraData: {fileID: 11400000, guid: 0315d1c69ac388d4a90560e0d479ec9e, type: 2}
+  interactions: []
+  playerSnap: {fileID: 0}
   isWhite: 0
   frontDetection: {fileID: 1350849887469229409}
   backDetection: {fileID: 3046246890451925148}
@@ -292,16 +300,18 @@ MonoBehaviour:
   legsConstraints: {x: 0, y: 0.25, z: 0.25}
   legsOffset: {x: 0, y: 0.16, z: -0.1}
   legsSeparation: {x: 0.2, y: -0.08, z: 0.9}
+  legsFlexion: 0
+  anticipation: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   stepHeigh: 0.1
+  wolfModel: {fileID: 2522479577721023261}
   armature: {fileID: 6895416325596183427}
   leftHand: {fileID: 9112845842148806361}
   rightHand: {fileID: 4153207225479468939}
   leftFoot: {fileID: 5050728338652302213}
   rightFoot: {fileID: 6067121423362852480}
-  speed: 2
 --- !u!114 &1776993942702517536
 MonoBehaviour:
   m_ObjectHideFlags: 0

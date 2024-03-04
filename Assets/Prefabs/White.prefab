@@ -723,11 +723,15 @@ MonoBehaviour:
   anticipation: 0.5
   adaptationStep: 0.5
   adaptationSpeed: 20
-  wolfModel: {fileID: 6821128168320025632}
+  wolfModel: {fileID: 0}
   stepSensorsOffset: {x: 0, y: 0, z: 0.75}
   step: 0.5
   cameraData: {fileID: 11400000, guid: 0315d1c69ac388d4a90560e0d479ec9e, type: 2}
+  interactions: []
+  playerSnap: {fileID: 0}
   isWhite: 1
+  frontDetection: {fileID: 0}
+  backDetection: {fileID: 0}
 --- !u!114 &5222711625243133848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,7 +753,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   stepHeigh: 0.1
-  wolfModel: {fileID: 0}
+  wolfModel: {fileID: 6821128168320025632}
   armature: {fileID: 2457090450424304830}
   leftHand: {fileID: 5435236366247762271}
   rightHand: {fileID: 3137222185223373108}
