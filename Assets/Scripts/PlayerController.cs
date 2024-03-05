@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
     public bool InLockedInteraction { get => inLockedInteraction; set => inLockedInteraction = value; }
     public bool RestrictedInteraction { get => restrictedInteraction; set => restrictedInteraction = value; }
+    public bool IsBusy { get => isBusy; set => isBusy = value; }
     #endregion
 
     #region Unity Functions
@@ -116,7 +117,7 @@ public class PlayerController : MonoBehaviour
     public void OnInteract()
     {
 
-        if (interactions.Count > 0 && !isBusy)
+        if (interactions.Count > 0 && !IsBusy)
         {
             Transform closestInteraction = interactions[0].transform;
 
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
             currentInteraction = closestInteraction.GetComponent<BaseInteraction>();
             StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
             
-            isBusy = true;
+            IsBusy = true;
             rb.velocity = Vector3.zero;
         }
 
@@ -137,14 +138,14 @@ public class PlayerController : MonoBehaviour
             
             StartCoroutine(currentInteraction.InteractionExit());
             currentInteraction = null;
-            isBusy = false;
+            IsBusy = false;
         }
     }
 
     public void EndInteraction()
     {
         currentInteraction = null;
-        isBusy = false;
+        IsBusy = false;
     }
 
 
@@ -186,7 +187,6 @@ public class PlayerController : MonoBehaviour
             rb.velocity = direction;
             if (!restrictedInteraction)
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * Time.deltaTime);
-            Debug.Log(rb.velocity);
         }
     }
 

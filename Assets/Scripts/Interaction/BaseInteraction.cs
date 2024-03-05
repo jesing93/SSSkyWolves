@@ -112,7 +112,7 @@ public abstract class BaseInteraction : MonoBehaviour
         }
 
         icon.enabled = true;
-
+        currentPlayer.IsBusy = false;
         currentPlayer = null;
     }
 
@@ -122,7 +122,9 @@ public abstract class BaseInteraction : MonoBehaviour
     #region Data
     public enum InteractionType
     {
+        //Instant
         Sniff,
+        SwitchLights,
         GrabSmall,
         GrabLarge,
     }
