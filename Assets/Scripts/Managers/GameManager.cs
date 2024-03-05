@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     private PlayerController black;
     [SerializeField] private GameObject whitePref;
     [SerializeField] private GameObject blackPref;
+    [SerializeField] private GameObject whiteCamPref;
+    [SerializeField] private GameObject blackCamPref;
     private List<LightSource> lightSources = new();
     private GameObject whiteSpawn;
     private GameObject blackSpawn;
@@ -32,13 +35,20 @@ public class GameManager : MonoBehaviour
         Instance = this;
         whiteSpawn = GameObject.FindGameObjectWithTag("WhiteSpawn");
         blackSpawn = GameObject.FindGameObjectWithTag("BlackSpawn");
+        //Instantiate players
+        white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
+        black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
     }
 
     private void Start()
     {
-        //Instantiate players
-        white = Instantiate(whitePref, whiteSpawn.transform.position, whiteSpawn.transform.rotation).GetComponent<PlayerController>();
-        black = Instantiate(blackPref, blackSpawn.transform.position, blackSpawn.transform.rotation).GetComponent<PlayerController>();
+        //Assign cameras
+        CinemachineVirtualCamera whiteCam = whiteCamPref.GetComponentInChildren<CinemachineVirtualCamera>();
+        CinemachineVirtualCamera blackCam = blackCamPref.GetComponentInChildren<CinemachineVirtualCamera>();
+        whiteCam.Follow = white.transform;
+        whiteCam.LookAt = white.transform;
+        blackCam.Follow = black.transform;
+        blackCam.LookAt = black.transform;
     }
     private void FixedUpdate()
     {
