@@ -21,5 +21,6 @@ public class TextLoop : MonoBehaviour
     {
          textFade.DOFade(20, 3f).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
         //textFade.DOColor(new Color(220f, 220f, 220f), 2f).SetEase(Ease.InOutQuad).SetLoops(-1, LoopType.Yoyo);
+        
     }
 }
