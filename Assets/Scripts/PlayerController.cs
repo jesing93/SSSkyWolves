@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour
     //***** Inputs Zone *****//
     public void OnMove(Vector2 moveInput)
     {
+        Debug.Log("Get Input");
         this.moveInputTarget = moveInput;
     }
 
@@ -257,7 +258,7 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(forwardSensor, out forwardHit, step * 2, groundLayer) && forwardHit.distance > 0.005f && Physics.Raycast(backwardSensor, out backwardHit, step * 2, groundLayer) && backwardHit.distance > 0.005f)
         {
             greaterHeight = Mathf.Max(forwardHit.point.y, backwardHit.point.y);
-            Debug.Log(greaterHeight - transform.position.y);
+            //Debug.Log(greaterHeight - transform.position.y);
         }
         else {
             greaterHeight = transform.position.y;
@@ -268,9 +269,11 @@ public class PlayerController : MonoBehaviour
         //wolfModel.GetChild(0).position -= new Vector3(0,transform.position.y - lastPosition.y,0);
     }
 
-    #endregion
+    //***** Gameflow *****//
 
-    //***** Others *****//
+    /// <summary>
+    /// Check if player was for too much time on light / shadow
+    /// </summary>
     private void LightTimeCheck()
     {
         if ((isWhite && isInLight) || (!isWhite && !isInLight))
@@ -284,8 +287,18 @@ public class PlayerController : MonoBehaviour
         if (lightTime >= maxTimeToDie)
         {
             //TODO: Die
-            Debug.Log("Die: "+isWhite);
-            //GameManager.Instance.WolfDeath();
+            Debug.Log("Die: " + isWhite);
+            GameManager.Instance.WolfDeath(isWhite);
         }
     }
+
+    /// <summary>
+    /// Kill the player and respawn
+    /// </summary>
+    public void ReceiveDamage()
+    {
+        GameManager.Instance.WolfDeath(isWhite);
+    }
+
+    #endregion
 }

@@ -308,6 +308,17 @@
                 },
                 {
                     "name": "",
+                    "id": "215aaaf1-dabe-48e0-b6a2-67f54f6f3b78",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2c529699-af32-40d8-b4b6-8a737fab761d",
                     "path": "<Keyboard>/q",
                     "interactions": "",
@@ -431,6 +442,15 @@
                     "type": "PassThrough",
                     "id": "30a72836-2e8d-4872-99c2-7dde8db25ee6",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "4ea738aa-9056-4818-a7e5-73e439c166b8",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -852,6 +872,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d6315140-3028-4d6f-a127-3917ee8eae3f",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
