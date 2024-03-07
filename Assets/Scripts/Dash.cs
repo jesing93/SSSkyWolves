@@ -52,9 +52,7 @@ public class Dash : BaseSkill
         {
             //Debug.Log("ActivateSkill");
 
-            //Timer for cooldown
-            if (skillCdTimer > 0) return;
-            else skillCdTimer = skillCd;
+            base.ActivateSkill();
             Debug.DrawRay(rcShootPoint.transform.position, rcShootPoint.transform.forward * dashDistance, Color.red);
             float tpDistance = dashDistance;
 

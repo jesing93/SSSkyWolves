@@ -45,6 +45,11 @@ public abstract class BaseSkill : MonoBehaviour
 
     //Region dedicated to Custom methods.
     #region Custom Methods
-    public abstract void ActivateSkill();
+    public virtual void ActivateSkill()
+    {
+        //Timer for cooldown
+        if (skillCdTimer > 0) return;
+        else skillCdTimer = skillCd;
+    }
     #endregion
 }
