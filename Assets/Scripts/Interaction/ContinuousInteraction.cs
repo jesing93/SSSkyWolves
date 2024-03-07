@@ -8,6 +8,7 @@ public class ContinuousInteraction : BaseInteraction
     #region Variables
     private bool isBusy;
     [SerializeField]private Transform currentSnapPoint;
+    [SerializeField] private bool snapsToObjects;
 
 
     #endregion
@@ -100,7 +101,6 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             default: break;
         }
-        base.InteractionExit();
         isBusy = false;
         yield return StartCoroutine(base.InteractionExit());
     }

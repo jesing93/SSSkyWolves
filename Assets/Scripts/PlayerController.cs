@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         GetReferences();
-        Debug.Log(PlayerSnap);
     }
     private void Update()
     {
