@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other")]
     public bool isWhite;
+    private bool isProtected = false;
 
     private bool isInLight;
     float lightTime;
@@ -113,7 +114,6 @@ public class PlayerController : MonoBehaviour
     //***** Inputs Zone *****//
     public void OnMove(Vector2 moveInput)
     {
-        Debug.Log("Get Input");
         this.moveInputTarget = moveInput;
     }
 
@@ -276,20 +276,34 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void LightTimeCheck()
     {
-        if ((isWhite && isInLight) || (!isWhite && !isInLight))
+        if(!isProtected)
         {
+            if ((isWhite && isInLight) || (!isWhite && !isInLight))
+            {
+                lightTime = 0;
+            }
+            else
+            {
+                lightTime += Time.deltaTime;
+            }
+            if (lightTime >= maxTimeToDie)
+            {
+                //TODO: Die
+                Debug.Log("Die: " + isWhite);
+                GameManager.Instance.WolfDeath(isWhite);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Protect/unprotect the player from light/shadow
+    /// </summary>
+    /// <param name="isSafe">If the player enter or exit a safe area</param>
+    public void ProtectedArea(bool isSafe)
+    {
+        isProtected = isSafe;
+        if (isSafe)
             lightTime = 0;
-        }
-        else
-        {
-            lightTime += Time.deltaTime;
-        }
-        if (lightTime >= maxTimeToDie)
-        {
-            //TODO: Die
-            Debug.Log("Die: " + isWhite);
-            GameManager.Instance.WolfDeath(isWhite);
-        }
     }
 
     /// <summary>

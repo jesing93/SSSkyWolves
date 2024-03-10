@@ -130,6 +130,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void Win()
     {
+        Debug.Log("Win!");
         //TODO: WinScreen
     }
 
