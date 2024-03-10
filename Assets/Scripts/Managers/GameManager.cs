@@ -72,10 +72,12 @@ public class GameManager : MonoBehaviour
         if (isWhite)
         {
             white.transform.SetPositionAndRotation(whiteSpawn.transform.position, whiteSpawn.transform.rotation);
+            whiteSpawn.GetComponentInChildren<ParticleController>().PlaySystems();
         }
         else
         {
             black.transform.SetPositionAndRotation(blackSpawn.transform.position, blackSpawn.transform.rotation);
+            blackSpawn.GetComponentInChildren<ParticleController>().PlaySystems();
         };
         //TODO: Lifes management
     }
@@ -164,8 +166,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        white.IsInLight = isWhiteHit;
-        black.IsInLight = isBlackHit;
+        white.ChangeLightExposition(isWhiteHit);
+        black.ChangeLightExposition(isBlackHit);
     }
     #endregion
 }

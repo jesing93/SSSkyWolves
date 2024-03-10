@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     public Transform frontDetection;
     public Transform backDetection;
+    public ParticleController lightDamagePaticles;
     private Rigidbody rb;
     private PlayerAnimator panim;
     private Animator anim;
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Getters / Setters
-    public bool IsInLight { get => isInLight; set => isInLight = value; }
+    public bool IsInLight { get => isInLight; }
     public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
     public bool InLockedInteraction { get => inLockedInteraction; set => inLockedInteraction = value; }
     #endregion
@@ -302,8 +303,12 @@ public class PlayerController : MonoBehaviour
     public void ProtectedArea(bool isSafe)
     {
         isProtected = isSafe;
+        //Reset light/shadow exposure timer
         if (isSafe)
             lightTime = 0;
+
+        //Update particle systems state
+        UpdateLightDamageParticles();
     }
 
     /// <summary>
@@ -312,6 +317,37 @@ public class PlayerController : MonoBehaviour
     public void ReceiveDamage()
     {
         GameManager.Instance.WolfDeath(isWhite);
+    }
+
+    /// <summary>
+    /// Update light exposure state and turn on/off particles
+    /// </summary>
+    /// <param name="newIsInLight"></param>
+    public void ChangeLightExposition(bool newIsInLight)
+    {
+        if(isInLight != newIsInLight)
+        {
+            isInLight = newIsInLight;
+            UpdateLightDamageParticles();
+        }
+    }
+
+    /// <summary>
+    /// Check if damage particles should be displayed or not and update its state
+    /// </summary>
+    private void UpdateLightDamageParticles()
+    {
+        if ((isInLight && !isWhite) || (!isInLight && isWhite))
+        {
+            if (isProtected)
+                lightDamagePaticles.StopSystems();
+            else
+                lightDamagePaticles.PlaySystems();
+        }
+        else
+        {
+            lightDamagePaticles.StopSystems();
+        }
     }
 
     #endregion
