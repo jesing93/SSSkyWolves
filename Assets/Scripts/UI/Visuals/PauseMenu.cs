@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     public GameObject optionPanel;
     public GameObject creditsPanel;
+    public AudioSource audioSonido;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -39,36 +40,44 @@ public class PauseMenu : MonoBehaviour
     {
         CambiarPanel();
         Time.timeScale = 1.0f;
+        audioSonido.Play();
+
     }
     public void OnClickOpciones()
     {
+        audioSonido.Play();
         CambiarPanel(optionPanel);
     }
 
     public void OnClickMenu()
     {
+        audioSonido.Play();
         SceneManager.LoadScene("MainTitle");
         Time.timeScale = 1.0f;
     } 
     
     public void OnClickReiniciar()
     {
+        audioSonido.Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1.0f;
     }
 
     public void OnClickCreditos()
     {
+        audioSonido.Play();
         CambiarPanel(creditsPanel);
     }
 
     public void OnClickVolver()
     {
+        audioSonido.Play();
         CambiarPanel(pausePanel);
     }
 
     public void OnClickSalir()
     {
+        audioSonido.Play();
         Application.Quit();
         Debug.Log("ME CIERRO A-");
     }
