@@ -9,9 +9,6 @@ public class Portal : MonoBehaviour
     //Region dedicated to the different Variables.
     #region Variables
     public GameObject[] gates;
-    [SerializeField] GameObject gate1;
-    [SerializeField] GameObject gate2;
-    public Transform furthestGate;
   
 
     #endregion
@@ -23,15 +20,6 @@ public class Portal : MonoBehaviour
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-    private void Start()
-    {
-        gate1 = this.transform.GetChild(0).gameObject;
-        gate2 = this.transform.GetChild(1).gameObject;
-        furthestGate = gates[0].transform;
-
-
-    }
- 
 
     #endregion
 
@@ -42,11 +30,17 @@ public class Portal : MonoBehaviour
     //DOESNT WORk
     public Transform GetFurthestGate(Transform wolf)
     {
+        Transform furthestGate;
         Debug.Log("Entra");
         if (Vector3.Distance(gates[0].transform.position, wolf.position) <= Vector3.Distance(gates[1].transform.position, wolf.position))
         {
             furthestGate = gates[1].transform;
-            Debug.Log("funsiona");
+            Debug.Log("Gate1");
+        }
+        else
+        {
+            furthestGate = gates[0].transform;
+            Debug.Log("Gate0");
         }
         return furthestGate;
     }

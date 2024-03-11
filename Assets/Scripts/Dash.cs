@@ -8,15 +8,10 @@ public class Dash : BaseSkill
     //Region dedicated to the different Variables.
     #region Variables
 
-    public RaycastHit hit;
     public float dashDistance;
 
-    [SerializeField] LayerMask holeLayer;
-    [SerializeField] LayerMask portalLayer;
     [SerializeField] Portal portal;
     [SerializeField] Transform furthestGate;
-
-
 
     #endregion
 
@@ -28,20 +23,6 @@ public class Dash : BaseSkill
     //Region dedicated to methods native to Unity.
     #region Unity Functions
 
-    private void Start()
-    {
-        hit.distance = dashDistance;
-        portalLayer = LayerMask.GetMask("Portal");
-
-        portal = GetComponent<Portal>();
-
-        //Maybe not necesary, does fail in Portal.cs. this is also called in line 70
-        portal.GetFurthestGate(this.transform);
-
-    }
-   
-
-
     #endregion
 
     //Region dedicated to Custom methods.
@@ -50,41 +31,43 @@ public class Dash : BaseSkill
     {
         if (Input.GetKeyDown(dashkey))
         {
-            //Debug.Log("ActivateSkill");
-
             base.ActivateSkill();
             Debug.DrawRay(rcShootPoint.transform.position, rcShootPoint.transform.forward * dashDistance, Color.red);
             float tpDistance = dashDistance;
+            RaycastHit hit;
+            bool isPortal = false;
 
             //Shoots the raycast and do the dash
             if (Physics.Raycast(rcShootPoint.transform.position, rcShootPoint.transform.forward + transform.forward * dashDistance, out hit, dashDistance))
             {
                 //Teleports the black wolf to the furthest gate in the portal
-                //CHANGE TO BLACK WOLF IN FINAL VERSION
+                //TODO: CHANGE TO BLACK WOLF IN FINAL VERSION
                 if (controller.isWhite && hit.collider.gameObject.CompareTag("Portal") )
                 {
-
-                   //Debug.Log("Portal");
-                    furthestGate = portal.GetFurthestGate(this.transform);
+                    portal = hit.collider.gameObject.GetComponent<Portal>();
+                    furthestGate = portal.GetFurthestGate(transform);
                     wolf.transform.position = furthestGate.position;
-                }
-                //Sets the distance of the dash to max distance possible if it hits an object
-                if (hit.distance < dashDistance)
-                {
-                    tpDistance = Mathf.Min(dashDistance, Mathf.Max(0, hit.distance));
+                    isPortal = true;
                 }
                 else
                 {
-                    tpDistance = dashDistance;
+                    //Sets the distance of the dash to max distance possible if it hits an object
+                    if (hit.distance < dashDistance)
+                    {
+                        tpDistance = Mathf.Min(dashDistance, Mathf.Max(0, hit.distance));
+                    }
+                    else
+                    {
+                        tpDistance = dashDistance;
+                    }
                 }
-
             }
             else
             {
                 tpDistance = dashDistance;
             }
 
-                Debug.Log(tpDistance);
+            if(!isPortal)
                 wolf.transform.position += wolf.transform.forward * tpDistance;
         }
 
