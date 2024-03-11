@@ -127,6 +127,10 @@ public abstract class BaseInteraction : MonoBehaviour
         SwitchLights,
         GrabSmall,
         GrabLarge,
+        LightFire,
+        SnapToObject,
+        FireSource,
+        ObjectSnapper,
     }
     #endregion
 }
