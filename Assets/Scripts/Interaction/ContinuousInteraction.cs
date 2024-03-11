@@ -7,11 +7,15 @@ public class ContinuousInteraction : BaseInteraction
     //Region dedicated to the different Variables.
     #region Variables
     private bool isBusy;
+    [SerializeField]private Transform currentSnapPoint;
+    [SerializeField] private bool snapsToObjects;
+
+
     #endregion
 
     //Region deidcated to the different Getters/Setters.
     #region Getters/Setters
-
+    public Transform CurrentSnapPoint { get => currentSnapPoint; set => currentSnapPoint = value; }
     #endregion
 
     //Region dedicated to methods native to Unity.
@@ -36,7 +40,17 @@ public class ContinuousInteraction : BaseInteraction
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
-                player.InLockedInteraction = true;
+                currentPlayer.RestrictedInteraction = true;
+                if (hasOrientation)
+                {
+                    ClosestSnapPoint();
+                    currentPlayer.transform.rotation = CurrentSnapPoint.transform.rotation;
+
+                    Vector3 offset = player.transform.position - player.PlayerSnap.position;
+
+                    currentPlayer.transform.position = new Vector3(CurrentSnapPoint.transform.position.x + offset.x ,player.transform.position.y, CurrentSnapPoint.transform.position.z + offset.z);
+                }
+                transform.parent = player.transform;
                 //TODO: Make the object the parent of the wolf, limiting its movement
                 break;
             case (InteractionType.GrabSmall):
@@ -69,11 +83,12 @@ public class ContinuousInteraction : BaseInteraction
     //Method to end the interaction
     public override IEnumerator InteractionExit()
     {
-        
+
         switch (interactionType)
         {
             case InteractionType.GrabLarge:
-                currentPlayer.InLockedInteraction = false;
+                transform.parent = null;
+                currentPlayer.RestrictedInteraction = false;
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
@@ -86,9 +101,18 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             default: break;
         }
-        base.InteractionExit();
         isBusy = false;
         yield return StartCoroutine(base.InteractionExit());
+    }
+
+    public void ClosestSnapPoint()
+    {
+
+        Transform closestInteraction = snapPoints[0].transform;
+        foreach (var snapPoint in snapPoints)
+                if (Vector3.Distance(closestInteraction.position, currentPlayer.transform.position) >= Vector3.Distance(snapPoint.position, currentPlayer.transform.position))
+                    closestInteraction = snapPoint.transform;
+        CurrentSnapPoint = closestInteraction;
     }
     #endregion
 }

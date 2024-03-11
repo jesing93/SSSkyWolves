@@ -46,7 +46,7 @@ public abstract class BaseInteraction : MonoBehaviour
         colliders = new();
         foreach (Collider collider in GetComponents<Collider>())
         {
-            if (collider.isTrigger)
+            if (!collider.isTrigger)
             {
                 colliders.Add(collider);
             }
@@ -112,7 +112,7 @@ public abstract class BaseInteraction : MonoBehaviour
         }
 
         icon.enabled = true;
-
+        currentPlayer.IsBusy = false;
         currentPlayer = null;
     }
 
@@ -122,9 +122,15 @@ public abstract class BaseInteraction : MonoBehaviour
     #region Data
     public enum InteractionType
     {
+        //Instant
         Sniff,
+        SwitchLights,
         GrabSmall,
         GrabLarge,
+        LightFire,
+        SnapToObject,
+        FireSource,
+        ObjectSnapper,
     }
     #endregion
 }

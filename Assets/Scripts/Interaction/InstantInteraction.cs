@@ -6,7 +6,7 @@ public  class InstantInteraction : BaseInteraction
 {
     //Region dedicated to the different Variables.
     #region Variables
-    
+    [SerializeField]private List<Light> lightSources;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -16,7 +16,14 @@ public  class InstantInteraction : BaseInteraction
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
+    private void Start()
+    {
+        lightSources = new();
 
+        foreach (Light light in GetComponentsInChildren<Light>())
+            lightSources.Add(light);
+        
+    }
     #endregion
 
     //Region dedicated to Custom methods.
@@ -24,21 +31,26 @@ public  class InstantInteraction : BaseInteraction
     //Method to start the interaction
     public override IEnumerator InteractionEnter(PlayerController player)
     {
+        Debug.Log("Entered");
         base.InteractionEnter(player);
         switch(interactionType)
         {
-            case InteractionType.Sniff:
+            case InteractionType.SwitchLights:
+                foreach (Light light in lightSources)
+                    light.enabled = !light.enabled;
                 break;
             default: break;
         }
         yield return StartCoroutine(base.InteractionEnter(player));
+
+        StartCoroutine(InteractionExit());
     }
     //Method to end the interaction
     public override IEnumerator InteractionExit()
     {
         switch (interactionType)
         {
-            case InteractionType.Sniff:
+            case InteractionType.SwitchLights:
                 break;
             default: break;
         }
