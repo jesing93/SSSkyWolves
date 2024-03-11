@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem.XR;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 public class ControlEscena : MonoBehaviour
 {
     //Region dedicated to the different Variables.
     #region Variables
+
+    //public PlayerInput input;
 
     #endregion
 
@@ -18,12 +23,11 @@ public class ControlEscena : MonoBehaviour
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-    private void Update()
+    private void Awake()
     {
-        if (Input.anyKeyDown)
-        {
-            LoadScene();
-        }
+        //input = new();
+        //input += ctx => LoadScene();
+        InputSystem.onAnyButtonPress.Call(ctx => LoadScene());
     }
     void LoadScene()
     {
