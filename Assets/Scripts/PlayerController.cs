@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviour
     //TODO:almacenar Interaciones
     public void AddInteraction(Transform interaction)
     {
+        BaseInteraction interactionType = interaction.GetComponent<BaseInteraction>();
         interactions.Add(interaction);
     }
     public void RemoveInteraction(Transform interaction)
