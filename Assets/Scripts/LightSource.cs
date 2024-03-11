@@ -100,8 +100,8 @@ public class LightSource : MonoBehaviour
         }
         else if (lightType == DetectionLightType.Directional) //If directional
         {
-            Ray skyRay = new(detectionPoint, transform.position + (-lightSource.transform.forward * 100));
-            Debug.DrawRay(detectionPoint, transform.position + (-lightSource.transform.forward * 100), Color.red, 1f);
+            Ray skyRay = new(detectionPoint, (-lightSource.transform.forward * 100));
+            Debug.DrawRay(detectionPoint, (-lightSource.transform.forward * 100), Color.red, 1f);
             //Shoot ray to sky
             if (Physics.Raycast(skyRay, 100))
             {

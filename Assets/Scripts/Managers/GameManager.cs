@@ -50,9 +50,9 @@ public class GameManager : MonoBehaviour
         CinemachineVirtualCamera whiteCam = whiteCamPref.GetComponentInChildren<CinemachineVirtualCamera>();
         CinemachineVirtualCamera blackCam = blackCamPref.GetComponentInChildren<CinemachineVirtualCamera>();
         whiteCam.Follow = white.transform;
-        whiteCam.LookAt = white.transform;
+        whiteCam.LookAt = white.cameraTrack;
         blackCam.Follow = black.transform;
-        blackCam.LookAt = black.transform;
+        blackCam.LookAt = black.cameraTrack;
     }
     private void FixedUpdate()
     {
