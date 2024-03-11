@@ -76,7 +76,9 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Move();
-        LightTimeCheck();
+
+        //OvercomeStep();
+        //LightTimeCheck();
     }
     void LateUpdate()
     {

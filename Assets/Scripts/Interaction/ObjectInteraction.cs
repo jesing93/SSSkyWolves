@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectInteraction : BaseInteraction
+public class ObjectInteraction : MonoBehaviour
 {
     //Region dedicated to the different Variables.
     #region Variables
@@ -17,12 +17,11 @@ public class ObjectInteraction : BaseInteraction
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-    protected new void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
-        //overrides base interaction stuff
     }
 
-    protected new void OnTriggerExit(Collider other)
+    protected void OnTriggerExit(Collider other)
     {
         //overrides base interaction stuff
     }
@@ -30,19 +29,18 @@ public class ObjectInteraction : BaseInteraction
 
     //Region dedicated to Custom methods.
     #region Custom Methods
+    public void ToggleInteraction(bool toggle) => canInteract = toggle;
 
-    //TODO: A Way to know when the item can interact and when it cant
-    protected IEnumerator InteractionEnter()
+    public IEnumerator InteractionEnter(ObjectInteractionTrigger trigger)
     {
-        //TODO: turn on Fire When near a firePlace
-
-        //overrides base interaction stuff
-        /*transform.position = other.transform.position;*/
+        transform.position = trigger.transform.position;
+        transform.parent = trigger.transform;
         yield return new WaitForSeconds(0);
     }
 
-    protected new IEnumerator InteractionExit() 
+    public IEnumerator InteractionExit() 
     {
+        
         yield return new WaitForSeconds(0); 
     }
     #endregion

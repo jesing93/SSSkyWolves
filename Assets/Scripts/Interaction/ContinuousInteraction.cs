@@ -51,10 +51,14 @@ public class ContinuousInteraction : BaseInteraction
                     currentPlayer.transform.position = new Vector3(CurrentSnapPoint.transform.position.x + offset.x ,player.transform.position.y, CurrentSnapPoint.transform.position.z + offset.z);
                 }
                 transform.parent = player.transform;
-                //TODO: Make the object the parent of the wolf, limiting its movement
                 break;
             case (InteractionType.GrabSmall):
-                //TODO: Make the wolf the parent of the wolf, letting it move freely
+
+                if (TryGetComponent<ObjectInteraction>(out ObjectInteraction objectInteraction))
+                {
+                    objectInteraction.ToggleInteraction(true);
+                }
+
                 transform.position = player.PlayerSnap.position;
                 transform.parent = player.transform;
 
@@ -92,6 +96,11 @@ public class ContinuousInteraction : BaseInteraction
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
+                if (TryGetComponent<ObjectInteraction>(out ObjectInteraction objectInteraction))
+                {
+                    objectInteraction.ToggleInteraction(true);
+                }
+
                 transform.parent = null;
 
                 foreach (Collider collider in colliders)
