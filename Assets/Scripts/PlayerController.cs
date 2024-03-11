@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Other")]
     public bool isWhite;
-    private bool isProtected = false;
 
     [Header("References")]
     public Transform frontDetection;
@@ -62,13 +61,17 @@ public class PlayerController : MonoBehaviour
     private PlayerAnimator panim;
     private Animator anim;
     private GameObject rel;
+    private CapsuleCollider[] cols;
+    private Vector3[] colsOffsets;
 
-    CapsuleCollider[] cols;
-    Vector3[] colsOffsets;
-
+    [Header("LightControl")]
+    [SerializeField] private float maxTimeToDie = .6f;
     private bool isInLight;
-    float lightTime;
-    float maxTimeToDie = 1;
+    private float lightTime;
+    private bool isProtected = false;
+
+    [Header("Camera")]
+    public Transform cameraTrack;
 
     #endregion
 
@@ -380,7 +383,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                lightTime += Time.deltaTime;
+                lightTime += Time.fixedDeltaTime;
             }
             if (lightTime >= maxTimeToDie)
             {
