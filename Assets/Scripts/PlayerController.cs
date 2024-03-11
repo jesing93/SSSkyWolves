@@ -47,6 +47,7 @@ public class PlayerController : MonoBehaviour
     private BaseInteraction currentInteraction;
     private bool isBusy;
     private bool inLockedInteraction;
+    private bool restrictedInteraction;
 
     [Header("Other")]
     public bool isWhite;
@@ -74,6 +75,8 @@ public class PlayerController : MonoBehaviour
     public bool IsInLight { get => isInLight; }
     public Transform PlayerSnap { get => playerSnap; set => playerSnap = value; }
     public bool InLockedInteraction { get => inLockedInteraction; set => inLockedInteraction = value; }
+    public bool RestrictedInteraction { get => restrictedInteraction; set => restrictedInteraction = value; }
+    public bool IsBusy { get => isBusy; set => isBusy = value; }
     #endregion
 
     #region Unity Functions
@@ -130,6 +133,7 @@ public class PlayerController : MonoBehaviour
     //TODO:almacenar Interaciones
     public void AddInteraction(Transform interaction)
     {
+        BaseInteraction interactionType = interaction.GetComponent<BaseInteraction>();
         interactions.Add(interaction);
     }
     public void RemoveInteraction(Transform interaction)
@@ -153,7 +157,8 @@ public class PlayerController : MonoBehaviour
             currentInteraction = closestInteraction.GetComponent<BaseInteraction>();
             StartCoroutine(closestInteraction.GetComponent<BaseInteraction>().InteractionEnter(this));
             
-            isBusy = true;
+            IsBusy = true;
+            rb.velocity = Vector3.zero;
         }
 
         else if (currentInteraction?.GetType() == typeof(ContinuousInteraction))
@@ -161,14 +166,14 @@ public class PlayerController : MonoBehaviour
             
             StartCoroutine(currentInteraction.InteractionExit());
             currentInteraction = null;
-            isBusy = false;
+            IsBusy = false;
         }
     }
 
     public void EndInteraction()
     {
         currentInteraction = null;
-        isBusy = false;
+        IsBusy = false;
     }
 
     private void InputsModifiers()
@@ -229,31 +234,45 @@ public class PlayerController : MonoBehaviour
             rampSlideForce -= Time.deltaTime * rampSlideDeath;
             yAxisCap.x = -25;
         }
+        
     }
 
     // Setea la velocidad del rigidbody en funcion de los ejes de entrada y la gravedad calculada. Ademas rota al personaje hacia la direccion a la que se mueve.
     private void Move()
     {
-        Vector3 direction;
-        direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
+        if (!inLockedInteraction)
+        {
+            Vector3 direction;
+            if (restrictedInteraction)
+            {
+                Transform snapPoint = currentInteraction.ConvertTo<ContinuousInteraction>().CurrentSnapPoint.transform;
+                direction = new Vector3(0, 0, moveInput.y);
+                direction = Quaternion.LookRotation(snapPoint.forward, snapPoint.up) * direction;
+            }
+            else
+            {
+                direction = new((Mathf.Sin(moveInput.x * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.x), 0, (Mathf.Sin(moveInput.y * 3.14f - 3.14f / 2) / 2 + 0.5f) * Mathf.Sign(moveInput.y));
+            }
 
-        if (direction.magnitude > 1) direction.Normalize();
-        direction *= movementSpeed;
-        rel.transform.position = transform.position;
-        rel.transform.LookAt(transform.position + direction);
-
-        yAxis = Mathf.Clamp(yAxis, yAxisCap.x, yAxisCap.y);
-        direction.y = yAxis;
-
-        Vector3 cross = Vector3.Cross(transform.right, groundNormal);
-        rampSlideForce = Mathf.Clamp(rampSlideForce, 0, maxRampSlideForce);
-        Vector3 rampSlide = -cross * movementSpeed * rampSlideForce;
-        direction += rampSlide;
-
-        rb.velocity = direction;
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * moveInput.magnitude * Time.fixedDeltaTime);
-
-        yAxis += gravity * Time.fixedDeltaTime;
+            if (direction.magnitude > 1) direction.Normalize();
+            direction *= movementSpeed;
+            rel.transform.position = transform.position;
+            rel.transform.LookAt(transform.position + direction);
+    
+            yAxis = Mathf.Clamp(yAxis, yAxisCap.x, yAxisCap.y);
+            direction.y = yAxis;
+    
+            Vector3 cross = Vector3.Cross(transform.right, groundNormal);
+            rampSlideForce = Mathf.Clamp(rampSlideForce, 0, maxRampSlideForce);
+            Vector3 rampSlide = -cross * movementSpeed * rampSlideForce;
+            direction += rampSlide;
+    
+            rb.velocity = direction;
+            if (!restrictedInteraction)
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(transform.eulerAngles.x, rel.transform.eulerAngles.y, transform.eulerAngles.z)), rotationSpeed * moveInput.magnitude * Time.fixedDeltaTime);
+            
+            yAxis += gravity * Time.fixedDeltaTime;
+        }
     }
 
     // Calcula la inclinacion media del terreno y rota el modelo 3D hasta alcanzarla.
