@@ -6,7 +6,9 @@ public  class InstantInteraction : BaseInteraction
 {
     //Region dedicated to the different Variables.
     #region Variables
-    [SerializeField]private List<Light> lightSources;
+    [SerializeField]private List<LightSource> lightSources;
+    [SerializeField] private float lightTimeStart;
+    [SerializeField] private float lightTimeOut;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -20,7 +22,7 @@ public  class InstantInteraction : BaseInteraction
     {
         lightSources = new();
 
-        foreach (Light light in GetComponentsInChildren<Light>())
+        foreach (LightSource light in GetComponentsInChildren<LightSource>())
             lightSources.Add(light);
         
     }
@@ -36,8 +38,13 @@ public  class InstantInteraction : BaseInteraction
         switch(interactionType)
         {
             case InteractionType.SwitchLights:
-                foreach (Light light in lightSources)
-                    light.enabled = !light.enabled;
+                yield return new WaitForSeconds(lightTimeStart);
+
+                foreach (LightSource light in lightSources)
+                    light.Switch();
+
+                yield return new WaitForSeconds(lightTimeOut);
+                
                 break;
             default: break;
         }
@@ -51,6 +58,8 @@ public  class InstantInteraction : BaseInteraction
         switch (interactionType)
         {
             case InteractionType.SwitchLights:
+                foreach (LightSource light in lightSources)
+                    light.Switch();
                 break;
             default: break;
         }
