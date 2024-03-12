@@ -7,14 +7,9 @@ public abstract class BaseSkill : MonoBehaviour
     //Region dedicated to the different Variables.
     #region Variables
     protected PlayerController controller;
-<<<<<<< Updated upstream
     public GameObject wolf;
-=======
-    [SerializeField] protected int skillIndex;
->>>>>>> Stashed changes
     public GameObject rcShootPoint;
     public LayerMask ignoreLayer;
-    protected bool canUseSkill;
 
     [Header("KeyBinds")]
     public KeyCode dashkey = KeyCode.LeftShift;
@@ -52,14 +47,9 @@ public abstract class BaseSkill : MonoBehaviour
     #region Custom Methods
     public virtual void ActivateSkill()
     {
-        canUseSkill = true;
         //Timer for cooldown
-        if (skillCdTimer > 0) canUseSkill = false; 
-        else
-        {
-            skillCdTimer = skillCd;
-            HUDController.instance.AbilityCooldownHUD(controller.isWhite, skillIndex, skillCd);
-        }
+        if (skillCdTimer > 0) return;
+        else skillCdTimer = skillCd;
     }
     #endregion
 }
