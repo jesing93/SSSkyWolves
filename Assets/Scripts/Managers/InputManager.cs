@@ -7,11 +7,13 @@ public class InputManager : MonoBehaviour
 {
     public PlayerInput input;
     private PlayerController controller;
+    private Dash dash;
 
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
         input = new();
+        TryGetComponent<Dash>(out dash);
     }
 
     private void Start()
@@ -22,7 +24,7 @@ public class InputManager : MonoBehaviour
             input.Player.MoveWASD.performed += ctx => controller.OnMove(ctx.ReadValue<Vector2>());
             input.Player.MoveWASD.canceled += ctx => controller.OnMove(Vector2.zero);
             input.Player.InteractWASD.started += ctx => controller.OnInteract();
-            input.Player.SkillWASD.started += ctx => Debug.Log("Skill"); //TODO: Call the skill manager
+            input.Player.SkillWASD.started += ctx => dash.ActivateSkill();
             input.Player.Pause.started += ctx => GameManager.Instance.TogglePause();
             input.UI.Pause.started += ctx => GameManager.Instance.TogglePause();
             input.UI.Cancel.started += ctx => GameManager.Instance.TogglePause(); //TODO: Call the menu manager
@@ -32,7 +34,7 @@ public class InputManager : MonoBehaviour
             input.Player.MoveIKJL.performed += ctx => controller.OnMove(ctx.ReadValue<Vector2>());
             input.Player.MoveIKJL.canceled += ctx => controller.OnMove(Vector2.zero);
             input.Player.InteractIKJL.started += ctx => controller.OnInteract();
-            input.Player.SkillIKJL.started += ctx => Debug.Log("Skill"); //TODO: Call the skill manager
+            input.Player.SkillIKJL.started += ctx => dash.ActivateSkill();
         }
 
         //Only enable player input

@@ -13,8 +13,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     public GameObject optionPanel;
     public GameObject creditsPanel;
-    public AudioSource buttonSound1;
-    public AudioSource buttonSound2;
+    public AudioSource audioSource;
 
     [SerializeField]
     private AudioMixer audioMixer;
@@ -23,6 +22,8 @@ public class PauseMenu : MonoBehaviour
     private bool isLoadingSettings;
     [SerializeField]
     private GameObject[] settingsItems;
+
+    public static PauseMenu instance;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -32,6 +33,15 @@ public class PauseMenu : MonoBehaviour
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
+
+    private void Awake()
+    {
+        instance = this;
+        Time.timeScale = 1.0f;
+        audioSource = GetComponent<AudioSource>();
+        LoadPrefs();
+    }
+
     private void Start()
     {
         ApplyPrefs();
@@ -40,68 +50,62 @@ public class PauseMenu : MonoBehaviour
         optionPanel.SetActive(false);
         creditsPanel.SetActive(false);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CambiarPanel(pausePanel);
-            Time.timeScale = 0.0f;
-        }
-    }
-    private void Awake()
-    {
-        Time.timeScale = 1.0f;
-        LoadPrefs();
-    }
 
     #endregion
 
     //Region dedicated to Custom methods.
     #region Custom Methods
 
+    public void PauseGame()
+    {
+        CambiarPanel(pausePanel);
+    }
+
+    public void ResumeGame()
+    {
+        CambiarPanel();
+        audioSource.Play();
+    }
 
     public void OnClickContinue()
     {
-        CambiarPanel();
-        Time.timeScale = 1.0f;
-        buttonSound1.Play();
-
+        GameManager.Instance.TogglePause();
     }
     public void OnClickOpciones()
     {
-        buttonSound1.Play();
+        audioSource.Play();
         CambiarPanel(optionPanel);
     }
 
     public void OnClickMenu()
     {
-        buttonSound1.Play();
+        audioSource.Play();
         SceneManager.LoadScene("MainTitle");
         Time.timeScale = 1.0f;
     }
 
     public void OnClickReiniciar()
     {
-        buttonSound2.Play();
+        audioSource.Play();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1.0f;
     }
 
     public void OnClickCreditos()
     {
-        buttonSound1.Play();
+        audioSource.Play();
         CambiarPanel(creditsPanel);
     }
 
     public void OnClickVolver()
     {
-        buttonSound2.Play();
+        audioSource.Play();
         CambiarPanel(pausePanel);
     }
 
     public void OnClickSalir()
     {
-        buttonSound2.Play();
+        audioSource.Play();
         Application.Quit();
         Debug.Log("ME CIERRO A-");
     }

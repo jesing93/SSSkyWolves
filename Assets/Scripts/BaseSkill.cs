@@ -7,12 +7,8 @@ public abstract class BaseSkill : MonoBehaviour
     //Region dedicated to the different Variables.
     #region Variables
     protected PlayerController controller;
-    public GameObject wolf;
     public GameObject rcShootPoint;
     public LayerMask ignoreLayer;
-
-    [Header("KeyBinds")]
-    public KeyCode dashkey = KeyCode.LeftShift;
 
 
     [Header("Cooldown")]
@@ -33,7 +29,6 @@ public abstract class BaseSkill : MonoBehaviour
     #region Unity Functions
     protected virtual void Update()
     {
-        ActivateSkill();
         if (skillCdTimer > 0)
             skillCdTimer -= Time.deltaTime;
     }
