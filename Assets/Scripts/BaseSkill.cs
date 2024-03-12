@@ -7,9 +7,11 @@ public abstract class BaseSkill : MonoBehaviour
     //Region dedicated to the different Variables.
     #region Variables
     protected PlayerController controller;
+    [SerializeField] protected int abilityIndex;
     public GameObject rcShootPoint;
     public LayerMask ignoreLayer;
 
+    protected bool canUseSKill;
 
     [Header("Cooldown")]
     public float skillCd;
@@ -42,9 +44,14 @@ public abstract class BaseSkill : MonoBehaviour
     #region Custom Methods
     public virtual void ActivateSkill()
     {
+        canUseSKill = true;
         //Timer for cooldown
-        if (skillCdTimer > 0) return;
-        else skillCdTimer = skillCd;
+        if (skillCdTimer > 0) canUseSKill = false;
+        else 
+        { 
+            skillCdTimer = skillCd;
+            HUDController.instance.AbilityCooldownHUD(controller.isWhite, abilityIndex, skillCd);
+        }
     }
     #endregion
 }

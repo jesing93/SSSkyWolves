@@ -53,11 +53,11 @@ public class HUDController : MonoBehaviour
         foreach (GameObject icon in abilityBlackIcon)
             abilityBlack.Add(new(icon, null));
 
-        foreach (KeyValuePair<GameObject, Coroutine> item in abilityWhite)
+        /*foreach (KeyValuePair<GameObject, Coroutine> item in abilityWhite)
             item.Key.SetActive(false);
 
         foreach (KeyValuePair<GameObject, Coroutine> item in abilityBlack)
-            item.Key.SetActive(false);
+            item.Key.SetActive(false);*/
     }
     #endregion
 

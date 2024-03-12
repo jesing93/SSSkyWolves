@@ -30,43 +30,47 @@ public class Dash : BaseSkill
     public override void ActivateSkill()
     {
         base.ActivateSkill();
-        Debug.DrawRay(rcShootPoint.transform.position, rcShootPoint.transform.forward * dashDistance, Color.red);
-        float tpDistance = dashDistance;
-        RaycastHit hit;
-        bool isPortal = false;
-
-        //Shoots the raycast and do the dash
-        if (Physics.Raycast(rcShootPoint.transform.position, rcShootPoint.transform.forward + transform.forward * dashDistance, out hit, dashDistance))
+        if (canUseSKill)
         {
-            //Teleports the black wolf to the furthest gate in the portal
-            //TODO: CHANGE TO BLACK WOLF IN FINAL VERSION
-            if (controller.isWhite && hit.collider.gameObject.CompareTag("Portal") )
+            Debug.DrawRay(rcShootPoint.transform.position, rcShootPoint.transform.forward * dashDistance, Color.red);
+            float tpDistance = dashDistance;
+            RaycastHit hit;
+            bool isPortal = false;
+
+            //Shoots the raycast and do the dash
+            if (Physics.Raycast(rcShootPoint.transform.position, rcShootPoint.transform.forward + transform.forward * dashDistance, out hit, dashDistance))
             {
-                portal = hit.collider.gameObject.GetComponent<Portal>();
-                furthestGate = portal.GetFurthestGate(transform);
-                transform.position = furthestGate.position;
-                isPortal = true;
-            }
-            else
-            {
-                //Sets the distance of the dash to max distance possible if it hits an object
-                if (hit.distance < dashDistance)
+                //Teleports the black wolf to the furthest gate in the portal
+                //TODO: CHANGE TO BLACK WOLF IN FINAL VERSION
+                if (controller.isWhite && hit.collider.gameObject.CompareTag("Portal"))
                 {
-                    tpDistance = Mathf.Min(dashDistance, Mathf.Max(0, hit.distance));
+                    portal = hit.collider.gameObject.GetComponent<Portal>();
+                    furthestGate = portal.GetFurthestGate(transform);
+                    transform.position = furthestGate.position;
+                    isPortal = true;
                 }
                 else
                 {
-                    tpDistance = dashDistance;
+                    //Sets the distance of the dash to max distance possible if it hits an object
+                    if (hit.distance < dashDistance)
+                    {
+                        tpDistance = Mathf.Min(dashDistance, Mathf.Max(0, hit.distance));
+                    }
+                    else
+                    {
+                        tpDistance = dashDistance;
+                    }
                 }
             }
-        }
-        else
-        {
-            tpDistance = dashDistance;
-        }
+            else
+            {
+                tpDistance = dashDistance;
+            }
 
-        if(!isPortal)
-            transform.position += transform.forward * tpDistance;
+            if (!isPortal)
+                transform.position += transform.forward * tpDistance;
+        }
+        
 
     }
     #endregion
