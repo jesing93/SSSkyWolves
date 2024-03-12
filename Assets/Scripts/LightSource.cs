@@ -10,7 +10,7 @@ public class LightSource : MonoBehaviour
     private Light lightSource;
     [SerializeField] private float lightIntensity;
     public DetectionLightType lightType;
-    private ParticleSystem[] particleSystems;
+    private ParticleController particleController;
 
     #endregion
 
@@ -27,7 +27,8 @@ public class LightSource : MonoBehaviour
         lightSource = GetComponentInChildren<Light>();
         lightSource.enabled = isOn;
         lightSource.shadowRadius = 0;
-        particleSystems = GetComponentsInChildren<ParticleSystem>();
+        particleController = GetComponentInChildren<ParticleController>();
+        Switch(isOn);
     }
 
     private void Start()
@@ -45,12 +46,10 @@ public class LightSource : MonoBehaviour
     {
         isOn = !isOn;
         lightSource.enabled = isOn;
-        if(isOn)
-            foreach(ParticleSystem particle in particleSystems)
-                particle.Play();
+        if (isOn)
+            particleController.PlaySystems();
         else
-            foreach (ParticleSystem particle in particleSystems)
-                particle.Stop();
+            particleController.StopSystems();
     }
 
     /// <summary>
@@ -62,11 +61,9 @@ public class LightSource : MonoBehaviour
         isOn = newState;
         lightSource.enabled = isOn;
         if (isOn)
-            foreach (ParticleSystem particle in particleSystems)
-                particle.Play();
+            particleController.PlaySystems();
         else
-            foreach (ParticleSystem particle in particleSystems)
-                particle.Stop();
+            particleController.StopSystems();
     }
 
     /// <summary>
