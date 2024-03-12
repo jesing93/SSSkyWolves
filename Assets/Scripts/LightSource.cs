@@ -46,10 +46,13 @@ public class LightSource : MonoBehaviour
     {
         isOn = !isOn;
         lightSource.enabled = isOn;
-        if (isOn)
-            particleController.PlaySystems();
-        else
-            particleController.StopSystems();
+        if (particleController != null)
+        {
+            if (isOn)
+                particleController.PlaySystems();
+            else
+                particleController.StopSystems();
+        }
     }
 
     /// <summary>
@@ -60,10 +63,13 @@ public class LightSource : MonoBehaviour
     {
         isOn = newState;
         lightSource.enabled = isOn;
-        if (isOn)
-            particleController.PlaySystems();
-        else
-            particleController.StopSystems();
+        if (particleController != null)
+        {
+            if (isOn)
+                particleController.PlaySystems();
+            else
+                particleController.StopSystems();
+        }
     }
 
     /// <summary>
