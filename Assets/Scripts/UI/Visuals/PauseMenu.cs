@@ -124,7 +124,7 @@ public class PauseMenu : MonoBehaviour
             //Save settings
             PlayerPrefs.SetFloat("MasterVolume", settingsItems[0].GetComponent<Slider>().value);
             PlayerPrefs.SetFloat("MusicVolume", settingsItems[1].GetComponent<Slider>().value);
-            PlayerPrefs.SetFloat("SFXUIVolume", settingsItems[2].GetComponent<Slider>().value);
+            PlayerPrefs.SetFloat("SFXVolume", settingsItems[2].GetComponent<Slider>().value);
 
             //Applying to the audio mixer
             ApplyPrefs();
@@ -139,7 +139,7 @@ public class PauseMenu : MonoBehaviour
             //Update UI
             settingsItems[0].GetComponent<Slider>().value = PlayerPrefs.GetFloat("MasterVolume");
             settingsItems[1].GetComponent<Slider>().value = PlayerPrefs.GetFloat("MusicVolume");
-            settingsItems[2].GetComponent<Slider>().value = PlayerPrefs.GetFloat("SFXUIVolume");
+            settingsItems[2].GetComponent<Slider>().value = PlayerPrefs.GetFloat("SFXVolume");
 
         }
         isLoadingSettings = false;
@@ -152,7 +152,7 @@ public class PauseMenu : MonoBehaviour
             //Update audio mixer
             audioMixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("MasterVolume"));
             audioMixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("MusicVolume"));
-            audioMixer.SetFloat("SFXUIVolume", PlayerPrefs.GetFloat("SFXUIVolume"));
+            audioMixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("SFXVolume"));
         }
     }
     #endregion
