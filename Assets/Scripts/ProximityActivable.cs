@@ -14,6 +14,7 @@ public class ProximityActivable : MonoBehaviour
     [SerializeField] private float deactivationDelay;
     private Coroutine currentSequence;
     private bool isActivating;
+    //private GameObject targetGO;
 
     #endregion
 
@@ -35,8 +36,9 @@ public class ProximityActivable : MonoBehaviour
     /// <summary>
     /// Activate the activable item
     /// </summary>
-    public void Activate()
+    public void Activate(/*GameObject tempTarget = null*/)
     {
+        //targetGO = tempTarget;
         if (currentSequence != null)
             StopCoroutine(currentSequence);
         isActivating = true;
@@ -86,6 +88,12 @@ public class ProximityActivable : MonoBehaviour
             case ActivableType.Fire:
                 ActivateLight();
                 break;
+            case ActivableType.Storable:
+                ActivateStorable();
+                break;
+            case ActivableType.Droppable:
+                ActivateDroppable();
+                break;
         }
     }
 
@@ -98,6 +106,12 @@ public class ProximityActivable : MonoBehaviour
         {
             case ActivableType.Fire:
                 DeactivateLight();
+                break;
+            case ActivableType.Storable:
+                DeactivateStorable();
+                break;
+            case ActivableType.Droppable:
+                DeactivateDroppable();
                 break;
         }
     }
@@ -127,18 +141,68 @@ public class ProximityActivable : MonoBehaviour
                 lightSource.Switch();
         }
     }
-    #endregion
-
-    #region data
 
     /// <summary>
-    /// The type of activable
+    /// Set Storage Transform
     /// </summary>
-    public enum ActivableType
+    private void ActivateStorable()
     {
-        Fire,
-        Mechanism
+        if (TryGetComponent<ContinuousInteraction>(out ContinuousInteraction interaction))
+        {
+            //interaction.CurrentSnapPoint = targetGO.transform;
+        }
     }
 
+    /// <summary>
+    /// Empty storage Transform
+    /// </summary>
+    private void DeactivateStorable()
+    {
+        if (TryGetComponent<ContinuousInteraction>(out ContinuousInteraction interaction))
+        {
+            interaction.CurrentSnapPoint = null;
+        }
+    }
+
+    /// <summary>
+    /// Set Storage Transform
+    /// </summary>
+    private void ActivateDroppable()
+    {
+        Debug.Log("Drop");
+        if (TryGetComponent<ContinuousInteraction>(out ContinuousInteraction interaction))
+        {
+            Debug.Log("Continue");
+            if (interaction.CurrentSnapPoint != null)
+            {
+                interaction.transform.parent = interaction.CurrentSnapPoint;
+                interaction.transform.position = interaction.CurrentSnapPoint.position;
+            }
+            
+        }
+    }
+
+    /// <summary>
+    /// Empty storage Transform
+    /// </summary>
+    private void DeactivateDroppable() { }
+
+
     #endregion
+
+
 }
+#region data
+
+/// <summary>
+/// The type of activable
+/// </summary>
+public enum ActivableType
+{
+    Fire,
+    Mechanism,
+    Storable,
+    Droppable
+}
+
+#endregion

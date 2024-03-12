@@ -17,8 +17,6 @@ public abstract class BaseInteraction : MonoBehaviour
     [SerializeField] protected List<Collider> triggers;
     [Tooltip("What action will the wolf do when interacting")]
     [SerializeField] protected InteractionType interactionType;
-
-
     [SerializeField] protected Animation enterAnimation;
 
     [SerializeField] protected Animation exitAnimation;
@@ -60,20 +58,21 @@ public abstract class BaseInteraction : MonoBehaviour
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.TryGetComponent<PlayerController>(out PlayerController player))
         {
-            other.GetComponent<PlayerController>().AddInteraction(this.transform);
+            player.AddInteraction(this.transform);
 
-            icon.enabled = true;
+            //icon.enabled = true;
         }
     }
     protected virtual void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.TryGetComponent<PlayerController>(out PlayerController player))
         {
-            other.GetComponent<PlayerController>().RemoveInteraction(this.transform);
+            
+            player.RemoveInteraction(this.transform);
 
-            icon.enabled = false;
+            //icon.enabled = false;
         }
     }
     #endregion
@@ -86,7 +85,7 @@ public abstract class BaseInteraction : MonoBehaviour
     {
         currentPlayer = player;
 
-        icon.enabled = false;
+        //icon.enabled = false;
 
         foreach (Collider collider in triggers)
         {
@@ -111,26 +110,25 @@ public abstract class BaseInteraction : MonoBehaviour
             collider.enabled = true;
         }
 
-        icon.enabled = true;
+        //icon.enabled = true;
         currentPlayer.IsBusy = false;
         currentPlayer = null;
     }
 
     #endregion
-
-    //Region dedicated to related Data
-    #region Data
-    public enum InteractionType
-    {
-        //Instant
-        Sniff,
-        SwitchLights,
-        GrabSmall,
-        GrabLarge,
-        LightFire,
-        SnapToObject,
-        FireSource,
-        ObjectSnapper,
-    }
-    #endregion
 }
+//Region dedicated to related Data
+#region Data
+public enum InteractionType
+{
+    //Instant
+    Sniff,
+    SwitchLights,
+    GrabSmall,
+    GrabLarge,
+    LightFire,
+    SnapToObject,
+    FireSource,
+    ObjectSnapper,
+}
+#endregion
