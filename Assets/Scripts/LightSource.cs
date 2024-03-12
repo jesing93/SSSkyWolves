@@ -26,7 +26,7 @@ public class LightSource : MonoBehaviour
     {
         lightSource = GetComponentInChildren<Light>();
         lightSource.enabled = isOn;
-        lightSource.shadowRadius = 0;
+        /*lightSource.shadowRadius = 0;*/
         particleSystems = GetComponentsInChildren<ParticleSystem>();
     }
 
