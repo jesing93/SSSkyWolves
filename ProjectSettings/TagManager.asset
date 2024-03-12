@@ -6,6 +6,8 @@ TagManager:
   tags:
   - WhiteSpawn
   - BlackSpawn
+  - White
+  - Black
   layers:
   - Default
   - TransparentFX
@@ -27,8 +29,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - WhiteCam
+  - BlackCam
   - 
   - 
   - 
