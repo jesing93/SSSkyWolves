@@ -16,6 +16,7 @@ public class ContinuousInteraction : BaseInteraction
     //Region deidcated to the different Getters/Setters.
     #region Getters/Setters
     public Transform CurrentSnapPoint { get => currentSnapPoint; set => currentSnapPoint = value; }
+    public bool IsBusy { get => isBusy; }
     #endregion
 
     //Region dedicated to methods native to Unity.
@@ -54,11 +55,6 @@ public class ContinuousInteraction : BaseInteraction
                 break;
             case (InteractionType.GrabSmall):
 
-                if (TryGetComponent<ObjectInteraction>(out ObjectInteraction objectInteraction))
-                {
-                    objectInteraction.ToggleInteraction(true);
-                }
-
                 transform.position = player.PlayerSnap.position;
                 transform.parent = player.transform;
 
@@ -96,22 +92,27 @@ public class ContinuousInteraction : BaseInteraction
                 //TODO: Unparents the objects 
                 break;
             case InteractionType.GrabSmall:
-                if (TryGetComponent<ObjectInteraction>(out ObjectInteraction objectInteraction))
-                {
-                    objectInteraction.ToggleInteraction(true);
-                }
-
-                transform.parent = null;
-
                 foreach (Collider collider in colliders)
                 {
                     collider.enabled = true;
                 }
+                transform.parent = null;
+
+                ProximityActivable[] activables = GetComponents<ProximityActivable>();
+                foreach (ProximityActivable p in activables) 
+                {
+                    if (p.Type == ActivableType.Droppable)
+                    {
+                        p.Activate();
+                    }
+                }
                 break;
             default: break;
+
         }
-        isBusy = false;
         yield return StartCoroutine(base.InteractionExit());
+        isBusy = false;
+
     }
 
     public void ClosestSnapPoint()
