@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -81,6 +82,13 @@ public class PauseMenu : MonoBehaviour
     public void OnClickContinue()
     {
         GameManager.Instance.TogglePause();
+    }
+    public void OnClickNextLevel()
+    {
+        if (SceneManager.sceneCountInBuildSettings == SceneManager.GetActiveScene().buildIndex + 1)
+            SceneManager.LoadScene(0);
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
     public void OnClickOpciones()
     {
