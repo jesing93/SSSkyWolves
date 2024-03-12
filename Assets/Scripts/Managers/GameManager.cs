@@ -98,12 +98,12 @@ public class GameManager : MonoBehaviour
         if (isGamePaused)
         {
             Time.timeScale = 0f;
-            //TODO: Call menu controller and close menu
+            PauseMenu.instance.PauseGame();
         }
         else
         {
             Time.timeScale = 1f;
-            //TODO: Call menu controller and open menu
+            PauseMenu.instance.ResumeGame();
         }
     }
 
