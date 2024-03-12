@@ -58,13 +58,20 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
+        Debug.Log("Pause: true");
         CambiarPanel(pausePanel);
     }
 
     public void ResumeGame()
     {
+        Debug.Log("Pause: false");
         CambiarPanel();
         audioSource.Play();
+    }
+
+    public void LevelEnded()
+    {
+
     }
 
     public void OnClickContinue()
@@ -80,15 +87,15 @@ public class PauseMenu : MonoBehaviour
     public void OnClickMenu()
     {
         audioSource.Play();
-        SceneManager.LoadScene("MainTitle");
         Time.timeScale = 1.0f;
+        SceneManager.LoadScene(0);
     }
 
     public void OnClickReiniciar()
     {
         audioSource.Play();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1.0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void OnClickCreditos()

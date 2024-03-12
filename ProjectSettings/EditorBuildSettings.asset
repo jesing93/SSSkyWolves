@@ -9,15 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainTitle.unity
     guid: 308ed87bd13020746a12a68344a569bd
   - enabled: 1
-    path: Assets/Scenes/HugoTesting.unity
-    guid: 2f0abf6382f566e48a82536b22b71597
-  - enabled: 1
-    path: Assets/Scenes/FelipeTesting.unity
-    guid: 36aac8f226b515c46b70ad04728c435b
-  - enabled: 1
-    path: Assets/Scenes/AlvaroTesting.unity
-    guid: f1f0579d467b88140b8e5f74f8e429db
-  - enabled: 1
-    path: Assets/Scenes/JesingTesting.unity
-    guid: 62d60c8b01464294684d604af8b5d6dd
+    path: Assets/Scenes/Level1.unity
+    guid: a6deb4195b6489f4893a64c714c4264f
   m_configObjects: {}

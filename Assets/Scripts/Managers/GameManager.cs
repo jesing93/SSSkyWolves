@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
     {
         isGamePaused = !isGamePaused;
 
-        Debug.Log("Pause: " +isGamePaused);
         //Switch player inputs
         white.GetComponent<InputManager>().TogglePause(isGamePaused);
         black.GetComponent<InputManager>().TogglePause(isGamePaused);

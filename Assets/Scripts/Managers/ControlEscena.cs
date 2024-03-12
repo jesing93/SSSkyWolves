@@ -28,7 +28,7 @@ public class ControlEscena : MonoBehaviour
     void LoadScene()
     {
         DOTween.KillAll();
-        SceneManager.LoadScene("HugoTesting");
+        SceneManager.LoadScene(1);
     }
     #endregion
 
