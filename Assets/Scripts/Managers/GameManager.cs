@@ -20,7 +20,8 @@ public class GameManager : MonoBehaviour
     private List<LightSource> lightSources = new();
     private GameObject whiteSpawn;
     private GameObject blackSpawn;
-    private float wolfsOnGoal = 0;
+    private bool whiteOnGoal = false;
+    private bool blackOnGoal = false;
     private bool isGamePaused = false;
 
 
@@ -109,10 +110,17 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Wolf reached the goal of the level
     /// </summary>
-    public void LevelGoalEnter()
+    public void LevelGoalEnter(bool isWhite)
     {
-        wolfsOnGoal++;
-        if (wolfsOnGoal > 1)
+        if (isWhite)
+        {
+            whiteOnGoal = true;
+        }
+        else
+        {
+            blackOnGoal = true;
+        }
+        if (whiteOnGoal && blackOnGoal)
         {
             Win();
         }
@@ -121,9 +129,16 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Wolf exit the goal of the level
     /// </summary>
-    public void LevelGoalExit()
+    public void LevelGoalExit(bool isWhite)
     {
-        wolfsOnGoal--;
+        if (isWhite)
+        {
+            whiteOnGoal = false;
+        }
+        else
+        {
+            blackOnGoal = false;
+        }
     }
 
     /// <summary>

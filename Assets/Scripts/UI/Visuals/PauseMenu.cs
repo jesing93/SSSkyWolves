@@ -13,6 +13,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pausePanel;
     public GameObject optionPanel;
     public GameObject creditsPanel;
+    public GameObject continueButton;
+    public GameObject nextLevelButton;
     public AudioSource audioSource;
 
     [SerializeField]
@@ -71,7 +73,9 @@ public class PauseMenu : MonoBehaviour
 
     public void LevelEnded()
     {
-
+        continueButton.SetActive(false);
+        nextLevelButton.SetActive(true);
+        PauseGame();
     }
 
     public void OnClickContinue()

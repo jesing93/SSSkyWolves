@@ -25,7 +25,7 @@ public class SafeArea : MonoBehaviour
         {
             other.GetComponent<PlayerController>().ProtectedArea(true);
             if(isEndOfLevel) 
-                GameManager.Instance.LevelGoalEnter();
+                GameManager.Instance.LevelGoalEnter(other.GetComponent<PlayerController>().isWhite);
         }
     }
 
@@ -35,7 +35,7 @@ public class SafeArea : MonoBehaviour
         {
             other.GetComponent<PlayerController>().ProtectedArea(false);
             if (isEndOfLevel)
-                GameManager.Instance.LevelGoalExit();
+                GameManager.Instance.LevelGoalExit(other.GetComponent<PlayerController>().isWhite);
         }
     }
 
