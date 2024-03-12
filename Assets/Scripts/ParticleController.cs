@@ -39,6 +39,27 @@ public class ParticleController : MonoBehaviour
     }
 
     /// <summary>
+    /// Play all the particle systems
+    /// </summary>
+    public void PlaySystems(float delay)
+    {
+        foreach (ParticleSystem system in pSystems)
+            system.Play();
+        StartCoroutine(StopDelay(delay));
+    }
+
+    /// <summary>
+    /// Stop particle systems after the delay
+    /// </summary>
+    /// <param name="delay"></param>
+    /// <returns></returns>
+    private IEnumerator StopDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        StopSystems();
+    }
+
+    /// <summary>
     /// Stop all the particle systems
     /// </summary>
     public void StopSystems()

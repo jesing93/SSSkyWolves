@@ -12,6 +12,7 @@ public abstract class BaseSkill : MonoBehaviour
     public LayerMask ignoreLayer;
 
     protected bool canUseSKill;
+    [SerializeField]protected ParticleController skillParticles;
 
     [Header("Cooldown")]
     public float skillCd;

@@ -37,6 +37,9 @@ public class Dash : BaseSkill
             RaycastHit hit;
             bool isPortal = false;
 
+            //Play particle systems before skill
+            skillParticles.PlaySystems();
+
             //Shoots the raycast and do the dash
             if (Physics.Raycast(rcShootPoint.transform.position, rcShootPoint.transform.forward + transform.forward * dashDistance, out hit, dashDistance))
             {
@@ -69,6 +72,9 @@ public class Dash : BaseSkill
 
             if (!isPortal)
                 transform.position += transform.forward * tpDistance;
+
+            //Play particle systems after skills
+            skillParticles.PlaySystems();
         }
         
 

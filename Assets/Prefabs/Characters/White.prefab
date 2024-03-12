@@ -788,6 +788,7 @@ Transform:
   - {fileID: 5656220595321006006}
   - {fileID: 3463880759133375057}
   - {fileID: 2049210134790137335}
+  - {fileID: 2972007750557094870}
   - {fileID: 7880838601716334100}
   - {fileID: 3880061286584806486}
   - {fileID: 4093258063530030766}
@@ -985,10 +986,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55b2bb3f01880f44ea2208da35fe1a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilityIndex: 0
   rcShootPoint: {fileID: 6236193404057766999}
   ignoreLayer:
     serializedVersion: 2
     m_Bits: 0
+  skillParticles: {fileID: 4990292589838049939}
   skillCd: 3
   skillCdTimer: 0
   dashDistance: 3
@@ -3369,6 +3372,79 @@ Transform:
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1225249952857178665, guid: da30cf9ffd4cfe445b86f4cb71fe728c, type: 3}
   m_PrefabInstance: {fileID: 4995956132851280853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55b22f3a4321eb74ead01fc0d5464f4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &7820060344669140575
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4558225755725120263}
+    m_Modifications:
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5024009746357069194, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+      propertyPath: m_Name
+      value: WhiteBlink
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+--- !u!4 &2972007750557094870 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5024009746357069193, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+  m_PrefabInstance: {fileID: 7820060344669140575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4990292589838049939 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3010511046794335436, guid: 4ecd5ec1703b37b458a9ba411f8a3fe1, type: 3}
+  m_PrefabInstance: {fileID: 7820060344669140575}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
