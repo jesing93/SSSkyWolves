@@ -116,7 +116,7 @@ public class LightSource : MonoBehaviour
             Ray skyRay = new(detectionPoint, (-lightSource.transform.forward * 100));
             Debug.DrawRay(detectionPoint, (-lightSource.transform.forward * 100), Color.red, 1f);
             //Shoot ray to sky
-            if (Physics.Raycast(skyRay, 100))
+            if (Physics.Raycast(skyRay, 100, Physics.AllLayers, QueryTriggerInteraction.Ignore))
             {
                 //If don't see sky
                 return false;
@@ -129,7 +129,7 @@ public class LightSource : MonoBehaviour
         Ray ray = new(transform.position, detectionPoint - transform.position);
         Debug.DrawRay(transform.position, detectionPoint - transform.position, Color.red, 1f);
         //Shoot ray to wolf
-        if (Physics.Raycast(ray, out RaycastHit hit, lightIntensity))
+        if (Physics.Raycast(ray, out RaycastHit hit, lightIntensity, Physics.AllLayers, QueryTriggerInteraction.Ignore))
         {
             //If hit with the player
             if ((hit.collider.gameObject.CompareTag("White") && isWhite) || (hit.collider.gameObject.CompareTag("Black") && !isWhite))
