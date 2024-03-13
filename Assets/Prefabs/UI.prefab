@@ -2306,9 +2306,9 @@ MonoBehaviour:
   pausePanel: {fileID: 2459377860732957121}
   optionPanel: {fileID: 8771139521549441544}
   creditsPanel: {fileID: 6332241725494414553}
-  continueButton: {fileID: 0}
-  nextLevelButton: {fileID: 0}
-  audioSource: {fileID: 0}
+  continueButton: {fileID: 142185875151561981}
+  nextLevelButton: {fileID: 5381019993945438683}
+  audioSource: {fileID: 4515760473964756098}
   audioMixer: {fileID: 24100000, guid: 21e4976d0fd000a4398760eba7c4250c, type: 2}
   settingsItems:
   - {fileID: 2036394921655727795}
@@ -5421,6 +5421,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1503036357982550775, guid: 3c1666411931c2c42a2976c28d7d1d7d, type: 3}
   m_PrefabInstance: {fileID: 3377845427295532344}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5381019993945438683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7227641513571044579, guid: 3c1666411931c2c42a2976c28d7d1d7d, type: 3}
+  m_PrefabInstance: {fileID: 3377845427295532344}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4486746482676148905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5640,6 +5645,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c1666411931c2c42a2976c28d7d1d7d, type: 3}
+--- !u!1 &142185875151561981 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7227641513571044579, guid: 3c1666411931c2c42a2976c28d7d1d7d, type: 3}
+  m_PrefabInstance: {fileID: 7328650604567881758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &8173826064833024745 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1503036357982550775, guid: 3c1666411931c2c42a2976c28d7d1d7d, type: 3}
