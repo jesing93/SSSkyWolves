@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dae52efab4a8cb342beeb52e67ec7b38
+guid: 0d3ee55a36f19ae48b96dd3d17c07cc6
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Spinel
-    second: {fileID: 2100000, guid: dae27f958a375a947ad28d7109001ab9, type: 2}
+    second: {fileID: 2100000, guid: 3598e697ecff4e84da12ed9ee7241ac6, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -40,7 +40,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -95,7 +95,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.001
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
