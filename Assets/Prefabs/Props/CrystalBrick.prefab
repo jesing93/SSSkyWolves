@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6994120897105230686}
   - component: {fileID: 5557369569351780873}
   - component: {fileID: 7807404637844155837}
+  - component: {fileID: 756322889939702400}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -164,6 +165,21 @@ MonoBehaviour:
   lightSources: []
   lightTimeStart: 2
   lightTimeOut: 5
+--- !u!114 &756322889939702400
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182357951485328949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a278c428d66cc7d48a3817dca50f17be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOn: 0
+  lightIntensity: 3
+  lightType: 0
 --- !u!1001 &5408050522276270995
 PrefabInstance:
   m_ObjectHideFlags: 0
