@@ -146,8 +146,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void Win()
     {
-        Debug.Log("Win!");
-        //TODO: WinScreen
+        PauseMenu.instance.LevelEnded();
+        Time.timeScale = 0;
+        
     }
 
     /// <summary>
