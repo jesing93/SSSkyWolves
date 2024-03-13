@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -257, y: -106}
-  m_SizeDelta: {x: 668.72, y: 50}
+  m_SizeDelta: {x: 668.72, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5454295513891991477
 CanvasRenderer:
@@ -65,8 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Saxophone and piano Nordic-themed soundtrack. Perfect for movies by Kjartan
-    Abel
+  m_text: 'Saxophone and piano Nordic-themed soundtrack by Kjartan Abel
 
 '
   m_isRightToLeft: 0
@@ -172,7 +171,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -257, y: -263}
-  m_SizeDelta: {x: 668.72, y: 50}
+  m_SizeDelta: {x: 668.72, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6881987768309833454
 CanvasRenderer:
@@ -202,8 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Saxophone and piano Nordic-themed soundtrack. Perfect for movies by Kjartan
-    Abel
+  m_text: 'Marcos de personaje by Token Stamp 2
 
 '
   m_isRightToLeft: 0
@@ -692,7 +690,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -257, y: -343}
-  m_SizeDelta: {x: 668.72, y: 50}
+  m_SizeDelta: {x: 668.72, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7872911161512529743
 CanvasRenderer:
@@ -722,10 +720,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Saxophone and piano Nordic-themed soundtrack. Perfect for movies by Kjartan
-    Abel
-
-'
+  m_text: Iconos de habilidades by Freepik
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a09d4d3e5e5be5d46972847c1574cd8f, type: 2}
   m_sharedMaterial: {fileID: -286104683685421694, guid: a09d4d3e5e5be5d46972847c1574cd8f, type: 2}
@@ -4283,7 +4278,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -257, y: -185}
-  m_SizeDelta: {x: 668.72, y: 50}
+  m_SizeDelta: {x: 668.72, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6432161375916952857
 CanvasRenderer:
@@ -4313,10 +4308,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Saxophone and piano Nordic-themed soundtrack. Perfect for movies by Kjartan
-    Abel
-
-'
+  m_text: Clouds song by Kiluaboy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a09d4d3e5e5be5d46972847c1574cd8f, type: 2}
   m_sharedMaterial: {fileID: -286104683685421694, guid: a09d4d3e5e5be5d46972847c1574cd8f, type: 2}
