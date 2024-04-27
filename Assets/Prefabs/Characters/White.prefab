@@ -995,6 +995,7 @@ MonoBehaviour:
   skillCd: 3
   skillCdTimer: 0
   dashDistance: 3
+  teleport: {fileID: 8300000, guid: b28914380ae50214b97c681cb57dfb98, type: 3}
 --- !u!1 &2526111447745608718
 GameObject:
   m_ObjectHideFlags: 0

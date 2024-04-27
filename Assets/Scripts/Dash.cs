@@ -12,6 +12,7 @@ public class Dash : BaseSkill
 
     private Portal portal;
     private Transform furthestGate;
+    
 
     #endregion
 
@@ -29,6 +30,7 @@ public class Dash : BaseSkill
     #region Custom Methods
     public override void ActivateSkill()
     {
+        
         base.ActivateSkill();
         if (canUseSKill)
         {
