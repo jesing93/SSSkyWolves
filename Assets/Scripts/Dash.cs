@@ -12,7 +12,7 @@ public class Dash : BaseSkill
 
     private Portal portal;
     private Transform furthestGate;
-    
+    public AudioSource teleport;
 
     #endregion
 
@@ -23,17 +23,17 @@ public class Dash : BaseSkill
 
     //Region dedicated to methods native to Unity.
     #region Unity Functions
-
+    
     #endregion
 
     //Region dedicated to Custom methods.
     #region Custom Methods
     public override void ActivateSkill()
     {
-        
         base.ActivateSkill();
         if (canUseSKill)
         {
+            teleport.PlayOneShot(teleport.clip);
             Debug.DrawRay(rcShootPoint.transform.position, rcShootPoint.transform.forward * dashDistance, Color.red);
             float tpDistance = dashDistance;
             RaycastHit hit;

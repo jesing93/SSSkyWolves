@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     private bool whiteOnGoal = false;
     private bool blackOnGoal = false;
     private bool isGamePaused = false;
-
+    public AudioSource death;
 
     #endregion
 
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     /// <param name="isWhite"></param>
     public void WolfDeath(bool isWhite)
     {
+        death.PlayOneShot(death.clip);
         if (isWhite)
         {
             white.transform.SetPositionAndRotation(whiteSpawn.transform.position, whiteSpawn.transform.rotation);
