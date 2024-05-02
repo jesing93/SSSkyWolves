@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
         }
         if (whiteOnGoal && blackOnGoal)
         {
-            Win();
+            Invoke(nameof(Win), 1);
         }
     }
 

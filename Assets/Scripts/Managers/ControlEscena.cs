@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using DG.Tweening;
+using System.Threading;
 
 public class ControlEscena : MonoBehaviour
 {
+
     //Region dedicated to the different Variables.
     #region Variables
+    enum Type { AnyKey, Countdown }
 
+    [SerializeField] private Type type;
+    [SerializeField] private float countdown;
+    [SerializeField] private string sceneName;
     #endregion
 
     //Region deidcated to the different Getters/Setters.
@@ -20,15 +26,22 @@ public class ControlEscena : MonoBehaviour
     #region Unity Functions
     private void Update()
     {
-        if (Input.anyKeyDown)
+        if (type == Type.AnyKey && Input.anyKeyDown)
         {
             LoadScene();
+        }
+        if(type == Type.Countdown)
+        {
+            if (countdown > 0) countdown -= Time.deltaTime;
+            else LoadScene();
+
+            if(Input.GetKeyDown(KeyCode.LeftControl)) LoadScene();
         }
     }
     void LoadScene()
     {
         DOTween.KillAll();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(sceneName);
     }
     #endregion
 

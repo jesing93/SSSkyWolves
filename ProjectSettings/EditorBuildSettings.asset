@@ -9,9 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MainTitle.unity
     guid: 308ed87bd13020746a12a68344a569bd
   - enabled: 1
+    path: Assets/Scenes/InitialKinematics.unity
+    guid: 24d754ce08a66c749bbc08f264bce075
+  - enabled: 1
     path: Assets/Scenes/Level1.unity
     guid: a6deb4195b6489f4893a64c714c4264f
   - enabled: 1
     path: Assets/Scenes/Level2.unity
     guid: 6fa9fa0a46639c94a802b2a78e73f39d
+  - enabled: 1
+    path: Assets/Scenes/FinalKinematics.unity
+    guid: 7ffd0ddb6f212f1448f35f681c539aff
   m_configObjects: {}

@@ -73,9 +73,16 @@ public class PauseMenu : MonoBehaviour
 
     public void LevelEnded()
     {
-        continueButton.SetActive(false);
-        nextLevelButton.SetActive(true);
-        PauseGame();
+        if (SceneManager.GetActiveScene().name == "Level2"){
+            Time.timeScale = 1;
+            SceneManager.LoadScene("FinalKinematics");
+        }
+        else
+        {
+            continueButton.SetActive(false);
+            nextLevelButton.SetActive(true);
+            PauseGame();
+        }
     }
 
     public void OnClickContinue()
